@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Личный кабинет</title>
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="header">
+  <div class="container header__inner">
+    <a class="header__logo" href="index.html"><img src="img/logo.svg" alt="" width="32" height="32">Звук Фест</a>
+    <button class="header__burger burger" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="main-nav">
+      <span class="burger__line"></span><span class="burger__line"></span><span class="burger__line"></span>
+    </button>
+    <nav class="header__nav nav" id="main-nav" aria-label="Главное меню">
+      <ul class="nav__list">
+        <li class="nav__item"><a class="nav__link" href="index.html">Главная</a></li>
+        <li class="nav__item"><a class="nav__link" href="program.html">Программа</a></li>
+        <li class="nav__item"><a class="nav__link" href="artists.html">Артисты</a></li>
+        <li class="nav__item"><a class="nav__link nav__link_active" aria-current="page" href="account.html">Личный кабинет</a></li>
+      <li class="nav__item"><a class="nav__link" href="cart.html">Корзина</a></li>
+</ul>
+    </nav>
+    <address class="header__address">Москва, Парк Горького</address>
+    <a class="header__button button button_theme_dark" href="account.html">Купить билет</a>
+  </div>
+</header>
+<main>
+  <section class="section">
+    <div class="container">
+      <h1>Личный кабинет</h1>
+      <p id="account-info"></p>
+      <button class="button button_theme_dark" id="logout" type="button">Выйти</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="section__title">Профиль</h2>
+      <div class="forms">
+        <form class="form" id="profile-form" name="profile" action="#" method="post" data-api="/api/profile" data-method="PUT">
+          <h3 class="form__title">Данные</h3>
+          <div class="form__field">
+            <label class="form__label" for="acc-name">Имя</label>
+            <input class="form__input" id="acc-name" type="text" name="name" required minlength="2">
+          </div>
+          <div class="form__field">
+            <label class="form__label" for="acc-email">Email</label>
+            <input class="form__input" id="acc-email" type="email" name="email" required>
+          </div>
+          <div class="form__field">
+            <label class="form__label" for="acc-phone">Телефон</label>
+            <input class="form__input" id="acc-phone" type="tel" name="phone" autocomplete="tel">
+          </div>
+          <p class="form__status" role="status"></p>
+          <button class="button button_theme_dark" type="submit">Сохранить</button>
+        </form>
+        <form class="form" name="password" action="#" method="post" data-api="/api/password" data-reset>
+          <h3 class="form__title">Смена пароля</h3>
+          <div class="form__field">
+            <label class="form__label" for="acc-old">Текущий пароль</label>
+            <input class="form__input" id="acc-old" type="password" name="old_password" required autocomplete="current-password">
+          </div>
+          <div class="form__field">
+            <label class="form__label" for="acc-new">Новый пароль (минимум 8 символов)</label>
+            <input class="form__input" id="acc-new" type="password" name="new_password" required minlength="8" autocomplete="new-password">
+          </div>
+          <div class="form__field">
+            <label class="form__label" for="acc-confirm">Повторите новый пароль</label>
+            <input class="form__input" id="acc-confirm" type="password" name="confirm_password" required autocomplete="new-password">
+          </div>
+          <p class="form__status" role="status"></p>
+          <button class="button button_theme_dark" type="submit">Изменить пароль</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="section__title">Мои обращения</h2>
+      <ul class="contacts__list" id="feedback-list"></ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="section__title">Журнал действий</h2>
+      <ul class="contacts__list" id="actions-list"></ul>
+      <h3>Последние просмотренные товары</h3>
+      <ul class="contacts__list" id="viewed-list"></ul>
+      <h3>История поиска</h3>
+      <ul class="contacts__list" id="search-list"></ul>
+    </div>
+  </section>
+</main>
+    <footer class="footer">
+  <div class="container">
+    <div class="footer__box">
+      <a class="footer__logo" href="index.html">Звук Фест</a>
+      <nav aria-label="Меню в подвале">
+        <ul class="footer__list">
+          <li><a href="index.html">Главная</a></li>
+          <li><a href="program.html">Программа</a></li>
+          <li><a href="artists.html">Артисты</a></li>
+          <li><a href="tickets.html">Билеты</a></li>
+        </ul>
+      </nav>
+      <address class="footer__address">
+        Москва, Крымский Вал, 9<br>
+        <a href="mailto:info@zvukfest.ru">info@zvukfest.ru</a><br>
+        <a href="tel:+74950000000">+7 (495) 000-00-00</a>
+      </address>
+      <ul class="footer__social">
+        <li><a href="#">Telegram</a></li>
+        <li><a href="#">VK</a></li>
+        <li><a href="#">YouTube</a></li>
+      </ul>
+      <p class="footer__copy">© 2027 Звук Fest. Все права защищены.</p>
+    </div>
+  </div>
+</footer>
+<script src="js/api.js"></script>
+<script src="js/script.js"></script>
+<script src="js/account.js"></script>
+</body>
+</html>

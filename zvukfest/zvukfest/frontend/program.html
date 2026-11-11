@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Программа — Звук Фест</title>
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="header">
+  <div class="container header__inner">
+    <a class="header__logo" href="index.html"><img src="img/logo.svg" alt="" width="32" height="32">Звук Фест</a>
+    <button class="header__burger burger" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="main-nav">
+      <span class="burger__line"></span><span class="burger__line"></span><span class="burger__line"></span>
+    </button>
+    <nav class="header__nav nav" id="main-nav" aria-label="Главное меню">
+      <ul class="nav__list">
+        <li class="nav__item"><a class="nav__link" href="index.html">Главная</a></li>
+        <li class="nav__item"><a class="nav__link nav__link_active" aria-current="page" href="program.html">Программа</a></li>
+        <li class="nav__item"><a class="nav__link" href="artists.html">Артисты</a></li>
+        <li class="nav__item"><a class="nav__link" href="tickets.html">Билеты</a></li>
+        <li class="nav__item"><a class="nav__link" href="account.html">Личный кабинет</a></li>
+      <li class="nav__item"><a class="nav__link" href="cart.html">Корзина</a></li>
+</ul>
+    </nav>
+    <address class="header__address">Москва, Парк Горького</address>
+    <a class="header__button button button_theme_dark" href="tickets.html">Купить билет</a>
+  </div>
+</header>
+<main>
+  <section class="section">
+    <div class="container">
+      <h1>Программа</h1>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="section__title">Пятница, 16 июля</h2>
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="table__head" scope="col">Время</th>
+              <th class="table__head" scope="col">Артист</th>
+              <th class="table__head" scope="col">Сцена</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th class="table__cell" scope="row">12:00</th>
+              <td class="table__cell">Мот</td>
+              <td class="table__cell">Малая сцена</td>
+            </tr>
+            <tr>
+              <th class="table__cell" scope="row">13:30</th>
+              <td class="table__cell">Zivert</td>
+              <td class="table__cell">Главная сцена</td>
+            </tr>
+            <tr>
+              <th class="table__cell" scope="row">15:00</th>
+              <td class="table__cell">Ваня Дмитриенко</td>
+              <td class="table__cell">Главная сцена</td>
+            </tr>
+            <tr>
+              <th class="table__cell" scope="row">16:30</th>
+              <td class="table__cell">Shaman</td>
+              <td class="table__cell">Главная сцена</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+<section class="schedule">
+  <h2 class="section__title">Летние выступления</h2>
+
+  <div class="schedule__table-wrapper">
+    <table class="schedule__table">
+      <thead>
+        <tr>
+          <th>Дата</th>
+          <th>Время</th>
+          <th>Артист</th>
+          <th>Сцена</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>20 июня</td>
+          <td>18:00</td>
+          <td>Группа «Север»</td>
+          <td>Главная сцена</td>
+        </tr>
+        <tr>
+          <td>21 июня</td>
+          <td>19:30</td>
+          <td>Маяк</td>
+          <td>Малая сцена</td>
+        </tr>
+        <tr>
+          <td>22 июня</td>
+          <td>20:00</td>
+          <td>Звуковой дождь</td>
+          <td>Главная сцена</td>
+        </tr>
+        <tr>
+          <td>23 июня</td>
+          <td>22:00</td>
+          <td>Ночной ритм</td>
+          <td>Танцпол</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+  <section class="section">
+    <div class="container">
+      <aside class="note">
+        <p>Расписание может измениться. Актуальную версию публикуем в соцсетях фестиваля.</p>
+      </aside>
+    </div>
+  </section>
+</main>
+<footer class="footer">
+  <div class="container">
+    <div class="footer__box">
+      <a class="footer__logo" href="index.html">Звук Фест</a>
+      <nav aria-label="Меню в подвале">
+        <ul class="footer__list">
+          <li><a href="index.html">Главная</a></li>
+          <li><a href="program.html">Программа</a></li>
+          <li><a href="artists.html">Артисты</a></li>
+          <li><a href="tickets.html">Билеты</a></li>
+        </ul>
+      </nav>
+      <address class="footer__address">
+        Москва, Крымский Вал, 9<br>
+        <a href="mailto:info@zvukfest.ru">info@zvukfest.ru</a><br>
+        <a href="tel:+74950000000">+7 (495) 000-00-00</a>
+      </address>
+      <ul class="footer__social">
+        <li><a href="#">Telegram</a></li>
+        <li><a href="#">VK</a></li>
+        <li><a href="#">YouTube</a></li>
+      </ul>
+      <p class="footer__copy">© 2027 Звук Фест. Все права защищены.</p>
+    </div>
+  </div>
+</footer>
+<script src="js/script.js"></script>
+</body>
+</html>

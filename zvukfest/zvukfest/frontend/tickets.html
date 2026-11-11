@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Билеты — Звук Фест</title>
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="header">
+  <div class="container header__inner">
+    <a class="header__logo" href="index.html"><img src="img/logo.svg" alt="" width="32" height="32">Звук Фест</a>
+    <button class="header__burger burger" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="main-nav">
+      <span class="burger__line"></span><span class="burger__line"></span><span class="burger__line"></span>
+    </button>
+    <nav class="header__nav nav" id="main-nav" aria-label="Главное меню">
+      <ul class="nav__list">
+        <li class="nav__item"><a class="nav__link" href="index.html">Главная</a></li>
+        <li class="nav__item"><a class="nav__link" href="program.html">Программа</a></li>
+        <li class="nav__item"><a class="nav__link" href="artists.html">Артисты</a></li>
+        <li class="nav__item"><a class="nav__link nav__link_active" aria-current="page" href="tickets.html">Билеты</a></li>
+        <li class="nav__item"><a class="nav__link" href="account.html">Личный кабинет</a></li>
+      <li class="nav__item"><a class="nav__link" href="cart.html">Корзина</a></li>
+</ul>
+    </nav>
+    <address class="header__address">Москва, Парк Горького</address>
+    <a class="header__button button button_theme_dark" href="tickets.html">Купить билет</a>
+  </div>
+</header>
+<main>
+  <section class="section">
+    <div class="container">
+      <h1>Билеты и контакты</h1>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <form class="form form_size_wide search-form" name="search" role="search" action="#" method="get">
+        <div class="form__field">
+          <label class="form__label" for="search-query">Поиск билетов</label>
+          <input class="form__input" id="search-query" type="search" name="query" minlength="2" maxlength="100" placeholder="Например, VIP">
+        </div>
+        <p class="form__status" role="status"></p>
+        <button class="button button_theme_dark" type="submit">Найти</button>
+      </form>
+      <div class="section__head">
+        <h2 class="section__title">Цены</h2>
+        <p class="section__text">Выберите формат билета. Поля, отмеченные звёздочкой, обязательны для заполнения.</p>
+      </div>
+      <div class="table-wrap">
+        <table class="table">
+          <caption class="visually-hidden">Типы билетов и цены</caption>
+          <thead>
+            <tr>
+              <th class="table__head" scope="col">Билет</th>
+              <th class="table__head" scope="col">Что входит</th>
+              <th class="table__head" scope="col">Цена</th>
+              <th class="table__head" scope="col"><span class="visually-hidden">Действие</span></th>
+            </tr>
+          </thead>
+          <tbody id="products-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section__head">
+        <h2 class="section__title">Личный кабинет</h2>
+        <p class="section__text">Зарегистрируйтесь, чтобы купить билет, или войдите, если аккаунт уже есть.</p>
+      </div>
+      <div class="forms">
+        <form class="form" id="login" name="login" action="#" method="post" data-api="/api/login" data-redirect="account.html">
+          <h3 class="form__title">Вход</h3>
+          <div class="form__field">
+            <label class="form__label" for="login-email">Email <span class="form__required" aria-hidden="true">*</span></label>
+            <input class="form__input" id="login-email" type="email" name="email" required autocomplete="username">
+          </div>
+          <div class="form__field">
+            <label class="form__label" for="login-password">Пароль <span class="form__required" aria-hidden="true">*</span></label>
+            <input class="form__input" id="login-password" type="password" name="password" required autocomplete="current-password">
+          </div>
+          <div class="form__check">
+            <input class="form__checkbox" id="login-remember" type="checkbox" name="remember">
+            <label for="login-remember">Запомнить меня</label>
+          </div>
+          <p class="form__status" role="status"></p>
+          <button class="button button_theme_dark" type="submit">Войти</button>
+        </form>
+    <form class="form form_type_register" id="register" name="register" action="#" method="post" data-api="/api/register" data-redirect="account.html">
+      <h3 class="form__title">Регистрация</h3>
+      <div class="form__field">
+        <label class="form__label" for="reg-username">Имя пользователя <span class="form__required" aria-hidden="true">*</span></label>
+        <input class="form__input" id="reg-username" type="text" name="username" required minlength="3">
+      </div>
+      <div class="form__field">
+        <label class="form__label" for="reg-email">Email <span class="form__required" aria-hidden="true">*</span></label>
+        <input class="form__input" id="reg-email" type="email" name="email" required autocomplete="email">
+      </div>
+      <div class="form__field">
+        <label class="form__label" for="reg-phone">Телефон</label>
+        <input class="form__input" id="reg-phone" type="tel" name="phone" autocomplete="tel" placeholder="+7 (___) ___-__-__">
+      </div>
+      <div class="form__field">
+        <label class="form__label" for="reg-password">Пароль (минимум 8 символов) <span class="form__required" aria-hidden="true">*</span></label>
+        <input class="form__input" id="reg-password" type="password" name="password" required minlength="8" autocomplete="new-password">
+      </div>
+      <div class="form__field">
+        <label class="form__label" for="reg-password-confirm">Повторите пароль <span class="form__required" aria-hidden="true">*</span></label>
+        <input class="form__input" id="reg-password-confirm" type="password" name="password_confirm" required autocomplete="new-password">
+      </div>
+      <div class="form__check">
+        <input class="form__checkbox" id="reg-terms" type="checkbox" name="terms" required>
+        <label for="reg-terms">Принимаю условия пользовательского соглашения <span class="form__required" aria-hidden="true">*</span></label>
+      </div>
+      <div class="form__check">
+        <input class="form__checkbox" id="reg-privacy" type="checkbox" name="privacy" required>
+        <label for="reg-privacy">Принимаю политику конфиденциальности <span class="form__required" aria-hidden="true">*</span></label>
+      </div>
+      <p class="form__status" role="status"></p>
+      <button class="button button_theme_dark" type="submit">Зарегистрироваться</button>
+    </form>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section__head">
+        <h2 class="section__title">Напишите нам</h2>
+        <p class="section__text">Ответим на вопросы о билетах и сотрудничестве в течение двух рабочих дней.</p>
+      </div>
+    <form class="form form_size_wide" name="feedback" action="#" method="post" data-api="/api/feedback" data-reset>
+      <div class="form__field">
+        <label class="form__label" for="fb-name">Имя <span class="form__required" aria-hidden="true">*</span></label>
+        <input class="form__input" id="fb-name" type="text" name="name" required>
+      </div>
+      <div class="form__field">
+        <label class="form__label" for="fb-email">Email <span class="form__required" aria-hidden="true">*</span></label>
+        <input class="form__input" id="fb-email" type="email" name="email" required autocomplete="email">
+      </div>
+      <div class="form__field"> <label class="form__label" for="fb-phone"> Телефон </label> <input class="form__input" id="fb-phone" type="tel" name="phone" autocomplete="tel" placeholder="+7 (___) ___-__-__"> </div>
+      <div class="form__field">
+        <label class="form__label" for="fb-subject">Тема <span class="form__required" aria-hidden="true">*</span></label>
+        <select class="form__input" id="fb-subject" name="subject" required>
+          <option value="">Выберите тему</option>
+          <option value="tickets">Вопрос по билетам</option>
+          <option value="partners">Сотрудничество</option>
+          <option value="other">Другое</option>
+        </select>
+      </div>
+      <div class="form__field">
+        <label class="form__label" for="fb-message">Сообщение <span class="form__required" aria-hidden="true">*</span></label>
+        <textarea class="form__input" id="fb-message" name="message" rows="5" required minlength="10"></textarea>
+      </div>
+      <div class="form__field">
+        <label class="form__label" for="fb-rating">Оценка</label>
+        <select class="form__input" id="fb-rating" name="rating">
+          <option value="">Без оценки</option>
+          <option value="5">5</option><option value="4">4</option><option value="3">3</option>
+          <option value="2">2</option><option value="1">1</option>
+        </select>
+      </div>
+      <div class="form__check">
+        <input class="form__checkbox" id="fb-privacy" type="checkbox" name="privacy" required>
+        <label for="fb-privacy">Согласен на обработку персональных данных <span class="form__required" aria-hidden="true">*</span></label>
+      </div>
+      <p class="form__status" role="status"></p>
+      <button class="button button_theme_dark" type="submit">Отправить сообщение</button>
+    </form>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section__head">
+        <h2 class="section__title">Как добраться</h2>
+        <p class="section__text">Фестиваль проходит в Парке Горького. Ближайшие станции метро: «Октябрьская» и «Парк культуры».</p>
+      </div>
+      <div class="contacts">
+        <div class="contacts__info">
+          <address>Москва, Крымский Вал, 9</address>
+          <ul class="contacts__list">
+            <li>Вход открыт с 12:00</li>
+            <li>Метро: «Октябрьская», «Парк культуры»</li>
+            <li>Парковка рядом с парком платная</li>
+          </ul>
+        </div>
+        <iframe class="map" title="Карта: Парк Горького, Москва" src="https://www.openstreetmap.org/export/embed.html?bbox=37.585%2C55.724%2C37.617%2C55.738&amp;layer=mapnik&amp;marker=55.7312%2C37.6010" loading="lazy" allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="footer">
+  <div class="container">
+    <div class="footer__box">
+      <a class="footer__logo" href="index.html">Звук Фест</a>
+      <nav aria-label="Меню в подвале">
+        <ul class="footer__list">
+          <li><a href="index.html">Главная</a></li>
+          <li><a href="program.html">Программа</a></li>
+          <li><a href="artists.html">Артисты</a></li>
+          <li><a href="tickets.html">Билеты</a></li>
+        </ul>
+      </nav>
+      <address class="footer__address">
+        Москва, Крымский Вал, 9<br>
+        <a href="mailto:info@zvukfest.ru">info@zvukfest.ru</a><br>
+        <a href="tel:+74950000000">+7 (495) 000-00-00</a>
+      </address>
+      <ul class="footer__social">
+        <li><a href="#">Telegram</a></li>
+        <li><a href="#">VK</a></li>
+        <li><a href="#">YouTube</a></li>
+      </ul>
+      <p class="footer__copy">© 2027 Звук Fest. Все права защищены.</p>
+    </div>
+  </div>
+</footer>
+<script src="js/api.js"></script>
+<script src="js/script.js"></script>
+<script src="js/tickets.js"></script>
+</body>
+</html>

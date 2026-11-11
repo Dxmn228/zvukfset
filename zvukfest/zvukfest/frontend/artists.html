@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Артисты — Звук Фест</title>
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="header">
+  <div class="container header__inner">
+    <a class="header__logo" href="index.html"><img src="img/logo.svg" alt="" width="32" height="32">Звук Фест</a>
+    <button class="header__burger burger" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="main-nav">
+      <span class="burger__line"></span><span class="burger__line"></span><span class="burger__line"></span>
+    </button>
+    <nav class="header__nav nav" id="main-nav" aria-label="Главное меню">
+      <ul class="nav__list">
+        <li class="nav__item"><a class="nav__link" href="index.html">Главная</a></li>
+        <li class="nav__item"><a class="nav__link" href="program.html">Программа</a></li>
+        <li class="nav__item"><a class="nav__link nav__link_active" aria-current="page" href="artists.html">Артисты</a></li>
+        <li class="nav__item"><a class="nav__link" href="tickets.html">Билеты</a></li>
+        <li class="nav__item"><a class="nav__link" href="account.html">Личный кабинет</a></li>
+      <li class="nav__item"><a class="nav__link" href="cart.html">Корзина</a></li>
+</ul>
+    </nav>
+    <address class="header__address">Москва, Парк Горького</address>
+    <a class="header__button button button_theme_dark" href="tickets.html">Купить билет</a>
+  </div>
+</header>
+<main>
+  <section class="section">
+    <div class="container">
+      <h1>Артисты</h1>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <ul class="artists">
+        <li>
+          <article class="artist artist_theme_green">
+            <img class="artist__photo" src="img/shaman.jpg" alt="Фото артиста: Shaman" width="300" height="300" loading="lazy">
+            <h3 class="artist__name">Шаман</h3>
+            <p class="artist__text">Поп-рок. Выступает 16 июля на Главной сцене.</p>
+          </article>
+        </li>
+        <li>
+          <article class="artist artist_theme_green">
+            <img class="artist__photo" src="img/vanya.jpg" alt="Фото артиста: Ваня Дмитриенко" width="300" height="300" loading="lazy">
+            <h3 class="artist__name">Ваня Дмитриенко</h3>
+            <p class="artist__text">Поп. Выступает 16 июля на Главной сцене.</p>
+          </article>
+        </li>
+        <li>
+          <article class="artist artist_theme_green">
+            <img class="artist__photo" src="img/stas.jpg" alt="Фото артиста: Стас Михайлов" width="300" height="300" loading="lazy">
+            <h3 class="artist__name">Стас Михайлов</h3>
+            <p class="artist__text">Поп. Выступает 16 июля на Главной сцене.</p>
+          </article>
+        </li>
+        <li>
+          <article class="artist artist_theme_green">
+            <img class="artist__photo" src="img/anna.jpg" alt="Фото артиста: Анна Асти" width="300" height="300" loading="lazy">
+            <h3 class="artist__name">Анна Асти</h3>
+            <p class="artist__text">Поп. Выступает 16 июля на Главной сцене.</p>
+          </article>
+        </li>
+      </ul>
+    </div>
+  </section>
+</main>
+<footer class="footer">
+  <div class="container">
+    <div class="footer__box">
+      <a class="footer__logo" href="index.html">Звук Фест</a>
+      <nav aria-label="Меню в подвале">
+        <ul class="footer__list">
+          <li><a href="index.html">Главная</a></li>
+          <li><a href="program.html">Программа</a></li>
+          <li><a href="artists.html">Артисты</a></li>
+          <li><a href="tickets.html">Билеты</a></li>
+        </ul>
+      </nav>
+      <address class="footer__address">
+        Москва, Крымский Вал, 9<br>
+        <a href="mailto:info@zvukfest.ru">info@zvukfest.ru</a><br>
+        <a href="tel:+74950000000">+7 (495) 000-00-00</a>
+      </address>
+      <ul class="footer__social">
+        <li><a href="#">VK</a></li>
+      </ul>
+      <p class="footer__copy">© 2027 Звук Фест. Все права защищены.</p>
+    </div>
+  </div>
+</footer>
+<script src="js/script.js"></script>
+</body>
+</html>

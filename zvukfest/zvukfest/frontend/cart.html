@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Корзина — Звук Фест</title>
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="header">
+  <div class="container header__inner">
+    <a class="header__logo" href="index.html"><img src="img/logo.svg" alt="" width="32" height="32">Звук Фест</a>
+    <button class="header__burger burger" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="main-nav">
+      <span class="burger__line"></span><span class="burger__line"></span><span class="burger__line"></span>
+    </button>
+    <nav class="header__nav nav" id="main-nav" aria-label="Главное меню">
+      <ul class="nav__list">
+        <li class="nav__item"><a class="nav__link" href="index.html">Главная</a></li>
+        <li class="nav__item"><a class="nav__link" href="program.html">Программа</a></li>
+        <li class="nav__item"><a class="nav__link" href="artists.html">Артисты</a></li>
+        <li class="nav__item"><a class="nav__link" href="account.html">Личный кабинет</a></li>
+      <li class="nav__item"><a class="nav__link nav__link_active" aria-current="page" href="cart.html">Корзина</a></li>
+</ul>
+    </nav>
+    <address class="header__address">Москва, Парк Горького</address>
+    <a class="header__button button button_theme_dark" href="tickets.html">Купить билет</a>
+  </div>
+</header>
+<main><section class="section"><div class="container">
+<div class="section__head"><h1>Корзина</h1><p class="section__text">Ваши билеты на Звук Фест. До 20 билетов каждого типа.</p></div>
+<p id="cart-status" class="form__status" role="status" aria-live="polite">Загружаем корзину…</p>
+<div id="cart-empty" class="cta" hidden><h2>Корзина пока пуста</h2><p>Выберите билеты и соберите свой фестиваль.</p><a class="button button_theme_green" href="tickets.html">Выбрать билеты</a></div>
+<div id="cart-login" class="cta" hidden><h2>Войдите в аккаунт</h2><p>Корзина сохраняется в вашем личном кабинете.</p><a class="button button_theme_green" href="tickets.html#login">Войти или зарегистрироваться</a></div>
+<div id="cart-content" class="cart-layout" hidden>
+<ul id="cart-items" class="cart-items" aria-label="Билеты в корзине"></ul>
+<aside class="cart-summary" aria-labelledby="summary-title"><h2 id="summary-title">Ваш выбор</h2>
+<p>Количество билетов: <strong id="cart-count">0</strong></p><p class="cart-total">Итого <strong id="cart-total">0 ₽</strong></p>
+<p>Оформление заказа и онлайн-оплата пока недоступны. Выбор сохраняется в корзине; наличие и цена могут измениться.</p>
+<a class="button button_theme_green" href="tickets.html">Добавить билеты</a><button class="button button_theme_dark" type="button" id="cart-clear">Очистить корзину</button></aside></div>
+<noscript>Для работы корзины включите JavaScript.</noscript>
+</div></section></main>
+    <footer class="footer">
+  <div class="container">
+    <div class="footer__box">
+      <a class="footer__logo" href="index.html">Звук Фест</a>
+      <nav aria-label="Меню в подвале">
+        <ul class="footer__list">
+          <li><a href="index.html">Главная</a></li>
+          <li><a href="program.html">Программа</a></li>
+          <li><a href="artists.html">Артисты</a></li>
+          <li><a href="tickets.html">Билеты</a></li>
+        </ul>
+      </nav>
+      <address class="footer__address">
+        Москва, Крымский Вал, 9<br>
+        <a href="mailto:info@zvukfest.ru">info@zvukfest.ru</a><br>
+        <a href="tel:+74950000000">+7 (495) 000-00-00</a>
+      </address>
+      <ul class="footer__social">
+        <li><a href="#">Telegram</a></li>
+        <li><a href="#">VK</a></li>
+        <li><a href="#">YouTube</a></li>
+      </ul>
+      <p class="footer__copy">© 2027 Звук Fest. Все права защищены.</p>
+    </div>
+  </div>
+</footer>
+<script src="js/api.js"></script>
+<script src="js/script.js"></script>
+<script src="js/cart.js"></script>
+</body>
+</html>
