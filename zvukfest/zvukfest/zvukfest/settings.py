@@ -1,13 +1,13 @@
 import os
 from pathlib import Path
 
+from .environment import required_env
 from .db_config import DATABASE
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 FRONTEND_DIR = BASE_DIR / 'frontend'      # папка с вашим сайтом
 
-SECRET_KEY = '-006#qmcq!=srksyg*#)5!gp*xy$c*fjatboo3rfbf3hhhr%)'
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', SECRET_KEY)
+SECRET_KEY = required_env('DJANGO_SECRET_KEY')
 DEBUG = os.environ.get('DJANGO_DEBUG', 'true').lower() in ('true', '1', 'yes')
 ALLOWED_HOSTS = [
     host.strip()

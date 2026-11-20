@@ -1,15 +1,13 @@
 import os
 
-# Параметры подключения к PostgreSQL
+from .environment import required_env
+
+
 DATABASE = {
     'ENGINE': 'django.db.backends.postgresql',
-    'NAME': 'zvukfest_db',
-    'USER': 'zvuk_user',
-    'PASSWORD': 'Mortalkombat1',
-    'HOST': 'localhost',
-    'PORT': '5432',
+    'NAME': os.environ.get('DB_NAME', os.environ.get('POSTGRES_DB', 'zvukfest_db')),
+    'USER': os.environ.get('DB_USER', os.environ.get('POSTGRES_USER', 'zvuk_user')),
+    'PASSWORD': required_env('DB_PASSWORD') if 'DB_PASSWORD' in os.environ else required_env('POSTGRES_PASSWORD'),
+    'HOST': os.environ.get('DB_HOST', 'localhost'),
+    'PORT': os.environ.get('DB_PORT', '5432'),
 }
-
-# В Docker хостом служит имя сервиса db; локальные настройки остаются запасными.
-for key in ('NAME', 'USER', 'PASSWORD', 'HOST', 'PORT'):
-    DATABASE[key] = os.environ.get(f'DB_{key}', DATABASE[key])

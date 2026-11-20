@@ -12,3 +12,12 @@ venv*
 .pytest_cache
 .idea
 .vscode
+**/secrets
+**/*.pem
+**/*.key
+**/*.dump
+**/*.backup
+**/*.sql
+**/*.sqlite3-*
+.coverage*
+htmlcov
