@@ -21,6 +21,8 @@ services:
     build:
       context: ./zvukfest/zvukfest
     restart: unless-stopped
+    volumes:
+      - ./zvukfest/zvukfest/frontend:/app/frontend:ro
     depends_on:
       db:
         condition: service_healthy

@@ -43,9 +43,12 @@ async function save(next) {
     if (!result.ok) throw new Error(result.body.error || 'Не удалось сохранить корзину.');
     items = result.body.items; render(); status.textContent = 'Корзина сохранена.';
   } catch (error) {
-    buttons.forEach((b,i) => b.disabled = previous[i]);
     status.textContent = error instanceof TypeError ? 'Нет связи с сервером. Повторите попытку.' : error.message;
-  } finally { busy = false; content.removeAttribute('aria-busy'); }
+  } finally {
+    buttons.forEach((b,i) => b.disabled = previous[i]);
+    busy = false;
+    content.removeAttribute('aria-busy');
+  }
 }
 document.querySelector('#cart-clear').addEventListener('click',() => save([]));
 (async () => {
