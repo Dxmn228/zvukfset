@@ -24,3 +24,5 @@ secrets/
 .coverage
 .coverage.*
 htmlcov/
+artifacts/
+test-results/

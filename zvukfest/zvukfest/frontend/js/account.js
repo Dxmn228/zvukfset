@@ -37,4 +37,7 @@ document.querySelector('#logout').addEventListener('click', async () => {
   location.href = 'index.html';
 });
 
-loadAccount();
+loadAccount().catch(() => {
+  document.querySelector('#account-info').textContent =
+    'Не удалось загрузить данные личного кабинета. Проверьте соединение и обновите страницу.';
+});
