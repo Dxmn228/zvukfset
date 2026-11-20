@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from .db_config import DATABASE
@@ -6,8 +7,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 FRONTEND_DIR = BASE_DIR / 'frontend'      # папка с вашим сайтом
 
 SECRET_KEY = '-006#qmcq!=srksyg*#)5!gp*xy$c*fjatboo3rfbf3hhhr%)'
-DEBUG = True
-ALLOWED_HOSTS = []
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', SECRET_KEY)
+DEBUG = os.environ.get('DJANGO_DEBUG', 'true').lower() in ('true', '1', 'yes')
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,[::1]').split(',')
+    if host.strip()
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',

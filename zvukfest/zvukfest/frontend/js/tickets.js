@@ -6,15 +6,29 @@ function makeCell(text, tag = 'td') {
   return cell;
 }
 
-function renderProducts(items) {
+function showProductsMessage(message, retry = false) {
+  const row = document.createElement('tr');
+  const cell = makeCell(message);
+  cell.colSpan = 4;
+  if (retry) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'button button_theme_dark';
+    button.textContent = 'Повторить загрузку';
+    button.addEventListener('click', () => loadProducts(searchForm.elements.query.value.trim()));
+    cell.append(document.createElement('br'), button);
+  }
+  row.append(cell);
+  document.querySelector('#products-body').replaceChildren(row);
+}
+
+function renderProducts(items, isSearch = false) {
   const body = document.querySelector('#products-body');
   body.replaceChildren();
   if (!items.length) {
-    const row = document.createElement('tr');
-    const cell = makeCell('Ничего не найдено');
-    cell.colSpan = 4;
-    row.append(cell);
-    body.append(row);
+    showProductsMessage(isSearch
+      ? 'По вашему запросу билеты не найдены. Измените запрос или очистите поиск.'
+      : 'Билеты пока не добавлены. Загляните сюда позже.');
     return;
   }
   for (const p of items) {
@@ -30,25 +44,41 @@ function renderProducts(items) {
   }
 }
 
-async function loadProducts() {
-  const result = await api('/api/products?sort=price');
-  renderProducts(result.body.items || []);
-}
-loadProducts();
-
 // Форма поиска
 const searchForm = document.querySelector('.search-form');
 const searchStatus = searchForm.querySelector('.form__status');
+let productsRequest = 0;
 
-searchForm.addEventListener('submit', async (event) => {
+async function loadProducts(query = '') {
+  const request = ++productsRequest;
+  const body = document.querySelector('#products-body');
+  body.setAttribute('aria-busy', 'true');
+  searchStatus.textContent = 'Загружаем билеты…';
+  showProductsMessage('Загружаем билеты…');
+  try {
+    const url = query ? '/api/search?q=' + encodeURIComponent(query) : '/api/products?sort=price';
+    const result = await api(url);
+    if (request !== productsRequest) return;
+    if (!result.ok || !Array.isArray(result.body.items)) {
+      throw new Error('Не удалось загрузить билеты. Повторите попытку.');
+    }
+    renderProducts(result.body.items, Boolean(query));
+    searchStatus.textContent = query ? `Найдено билетов: ${result.body.items.length}.` : '';
+  } catch {
+    if (request !== productsRequest) return;
+    const message = 'Не удалось загрузить билеты. Проверьте соединение и повторите попытку.';
+    showProductsMessage(message, true);
+    searchStatus.textContent = message;
+  } finally {
+    if (request === productsRequest) body.removeAttribute('aria-busy');
+  }
+}
+
+searchForm.addEventListener('submit', (event) => {
   event.preventDefault();
-  searchStatus.textContent = '';
-  const query = searchForm.elements.query.value.trim();
-  if (!query) return loadProducts();               // пустой запрос: показываем всё
-  const result = await api('/api/search?q=' + encodeURIComponent(query));
-  if (result.ok) renderProducts(result.body.items);
-  else searchStatus.textContent = Object.values(result.body.errors).join(' ');
+  loadProducts(searchForm.elements.query.value.trim());
 });
+loadProducts();
 let adding = false;
 async function addToCart(product, button) {
   if (adding) return; adding = true; button.disabled = true; button.classList.add('button_loading');
