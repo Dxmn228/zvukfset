@@ -260,6 +260,22 @@
   }
 }
 /* Корзина */
+.festival-slider { display: grid; gap: 1.5rem; }
+.festival-slide { display: grid; gap: 1.5rem; background: var(--gray); border-radius: var(--radius); overflow: hidden; }
+.festival-slide img { width: 100%; height: clamp(220px, 40vw, 420px); object-fit: cover; }
+.festival-slide > div { padding: 1.5rem; display: grid; gap: 1rem; }
+.slider-controls { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 1rem; }
+.cart-fab { position: fixed; bottom: 1rem; right: 1rem; z-index: 20; width: 64px; height: 64px; border-radius: 50%; background: var(--green); border: 2px solid var(--dark); font-size: 1.5rem; cursor: pointer; }
+#cart-badge { position: absolute; top: -8px; right: -4px; min-width: 1.7rem; padding: .2rem; border-radius: 1rem; background: var(--dark); color: white; font-size: .875rem; }
+.shop-dialog { width: min(700px, calc(100% - 2rem)); max-height: calc(100vh - 2rem); margin: auto; padding: 1.5rem; border: 2px solid var(--dark); border-radius: 24px; color: var(--dark); overflow: auto; }
+.shop-dialog::backdrop { background: rgb(0 0 0 / 55%); }
+.shop-dialog h2, .shop-dialog p, .shop-dialog ul { margin-bottom: 1rem; }
+.shop-dialog img { max-width: 100%; height: auto; }
+.dialog-close { display: block; margin-left: auto; margin-bottom: 1rem; }
+.mini-cart-item { border-bottom: 1px solid var(--dark); padding-bottom: 1rem; }
+.ticket-details { font: inherit; background: none; border: 0; text-decoration: underline; padding: .5rem 0; cursor: pointer; }
+.cart-fab:focus-visible, .ticket-details:focus-visible { outline: 3px solid #2563eb; outline-offset: 4px; }
+.footer { padding-bottom: 6rem; }
 [hidden] { display: none !important; }
 .cart-layout, .cart-items { display: grid; gap: 1.5rem; }
 .cart-item, .cart-summary { padding: 1.5rem; border: 1px solid var(--dark); border-radius: var(--radius); }

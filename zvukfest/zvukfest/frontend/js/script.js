@@ -49,10 +49,16 @@ document.querySelectorAll('.form[data-api]').forEach((form) => {
     button.disabled = true;
     status.textContent = '';
 
-    const result = await api(form.dataset.api, form.dataset.method || 'POST', formToObject(form));
-
-    button.classList.remove('button_loading');
-    button.disabled = false;
+    let result;
+    try {
+      result = await api(form.dataset.api, form.dataset.method || 'POST', formToObject(form));
+    } catch {
+      status.textContent = 'Нет связи с сервером. Повторите попытку.';
+      return;
+    } finally {
+      button.classList.remove('button_loading');
+      button.disabled = false;
+    }
 
     if (!result.ok) {                             // сервер вернул ошибки
       const errors = result.body.errors

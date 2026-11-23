@@ -10,6 +10,26 @@ from main.models import Product, User
 TEST_PASSWORD = 'Browser-test-password-123'
 
 
+@pytest.fixture(scope='session', autouse=True)
+def join_live_server_requests():
+    # Django's daemon request threads can outlive pytest-django's shared SQLite
+    # permission at shutdown. Join them before the live-server fixture releases it.
+    from django.test.testcases import LiveServerThread
+    original = LiveServerThread.server_class
+
+    class JoiningServer(original):
+        daemon_threads = False
+
+        def get_request(self):
+            connection, address = super().get_request()
+            connection.settimeout(5)
+            return connection, address
+
+    LiveServerThread.server_class = JoiningServer
+    yield
+    LiveServerThread.server_class = original
+
+
 @pytest.fixture(scope='session')
 def browser_context_args(browser_context_args):
     return {**browser_context_args, 'viewport': {'width': 1440, 'height': 1000}, 'locale': 'ru-RU'}

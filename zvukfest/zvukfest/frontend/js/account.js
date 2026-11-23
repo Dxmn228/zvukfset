@@ -10,10 +10,11 @@ function fillList(selector, lines) {
 
 async function loadAccount() {
   const profile = await api('/api/profile');
-  if (!profile.ok) {                               // не авторизован: отправляем на вход
+  if (profile.status === 401) {                    // не авторизован: отправляем на вход
     location.href = 'tickets.html#login';
     return;
   }
+  if (!profile.ok) throw new Error('Не удалось загрузить профиль');
   const form = document.querySelector('#profile-form');
   form.elements['name'].value = profile.body.name;
   form.elements['email'].value = profile.body.email;
@@ -30,6 +31,21 @@ async function loadAccount() {
   fillList('#actions-list', actions.body.items.map((a) => `${a.created_at}: ${a.action} ${a.page}`));
   fillList('#viewed-list', actions.body.last_viewed.map((p) => p.name));
   fillList('#search-list', actions.body.search_history);
+  const orders = await api('/api/orders');
+  if (!orders.ok) throw new Error('Не удалось загрузить заказы');
+  const list = document.querySelector('#orders-list'); list.replaceChildren();
+  if (!orders.body.items.length) fillList('#orders-list', []);
+  for (const order of orders.body.items) {
+    const row = document.createElement('li'); row.className = 'cart-item';
+    const title = document.createElement('h3'); title.textContent = `Заказ №${order.id} от ${order.created_at}`;
+    const state = document.createElement('p'); state.textContent = order.status;
+    const products = document.createElement('ul');
+    for (const item of order.items) {
+      const line = document.createElement('li'); line.textContent = `${item.name} × ${item.quantity} — ${item.unit_price} ₽ за билет`; products.append(line);
+    }
+    const total = document.createElement('p'); total.textContent = `Без скидки: ${order.subtotal} ₽. Скидка: ${order.discount} ₽. Итого: ${order.total} ₽.`;
+    row.append(title, state, products, total); list.append(row);
+  }
 }
 
 document.querySelector('#logout').addEventListener('click', async () => {

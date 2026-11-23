@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class Category(models.Model):
@@ -24,6 +25,7 @@ class Product(models.Model):
     price = models.DecimalField('Цена', max_digits=20, decimal_places=2)
     image = models.CharField('Изображение', max_length=255, blank=True)
     available = models.BooleanField('В наличии', default=True)
+    discount_percent = models.PositiveSmallIntegerField('Скидка, %', default=0, validators=[MaxValueValidator(100)])
     meta_keywords = models.CharField(max_length=255, blank=True)
     meta_description = models.CharField(max_length=255, blank=True)
     meta_title = models.CharField(max_length=255, blank=True)
@@ -34,6 +36,7 @@ class Product(models.Model):
 
     class Meta:
         db_table = 'products'
+        constraints = [models.CheckConstraint(condition=models.Q(discount_percent__lte=100), name='product_discount_0_100')]
         verbose_name = 'Товар'
         verbose_name_plural = 'Товары'
 
@@ -169,3 +172,31 @@ class CartItem(models.Model):
     class Meta:
         db_table = 'cart_items'
         constraints = [models.UniqueConstraint(fields=['user', 'product'], name='unique_cart_item')]
+
+
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
+    request_id = models.UUIDField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField('Статус', max_length=20, default='new', choices=[('new', 'Создан, не оплачен')])
+    subtotal = models.DecimalField('Без скидки', max_digits=24, decimal_places=2)
+    discount = models.DecimalField('Скидка', max_digits=24, decimal_places=2)
+    total = models.DecimalField('Итого', max_digits=24, decimal_places=2)
+
+    class Meta:
+        ordering = ['-created_at', '-id']
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'
+        constraints = [models.UniqueConstraint(fields=['user', 'request_id'], name='unique_order_request')]
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    name = models.CharField('Билет', max_length=255)
+    price = models.DecimalField('Исходная цена', max_digits=20, decimal_places=2)
+    unit_price = models.DecimalField('Цена со скидкой', max_digits=20, decimal_places=2)
+    quantity = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(20)])
+
+    class Meta:
+        constraints = [models.CheckConstraint(condition=models.Q(quantity__gte=1, quantity__lte=20), name='order_quantity_1_20')]

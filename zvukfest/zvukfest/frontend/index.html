@@ -30,6 +30,13 @@
   </div>
 </header>
 <main>
+<section class="section"><div class="container festival-slider" role="region" aria-roledescription="слайдер" aria-label="Атмосфера фестиваля">
+<h2 class="section__title">Три повода приехать</h2>
+<article class="festival-slide"><img src="img/main-stage.jpg" alt="Главная сцена фестиваля"><div><h3>Живая музыка</h3><p>Любимые артисты и большой звук на главной сцене.</p><a href="program.html">Посмотреть программу</a></div></article>
+<article class="festival-slide" hidden><img src="img/dance-floor.jpg" alt="Танцпол фестиваля"><div><h3>Танцы до вечера</h3><p>Электронная музыка и встречи с друзьями.</p><a href="artists.html">Познакомиться с артистами</a></div></article>
+<article class="festival-slide" hidden><img src="img/food-court.jpg" alt="Фудкорт фестиваля"><div><h3>Целый день впечатлений</h3><p>Еда, отдых и новые знакомства между выступлениями.</p><a href="tickets.html">Выбрать билет</a></div></article>
+<div class="slider-controls"><button class="button button_theme_dark" type="button" data-prev aria-label="Предыдущий слайд">Назад</button><p role="status" aria-live="polite">Слайд 1 из 3</p><button class="button button_theme_dark" type="button" data-next aria-label="Следующий слайд">Далее</button></div>
+</div></section>
   <section class="section">
     <div class="container cover">
       <div class="cover__text">
@@ -209,13 +216,16 @@
         <li><a href="#">VK</a></li>
       </ul>
       <ul class="footer__legal">
-        <li><a href="privacy.html">Политика конфиденциальности</a></li>
+        <li><a href="privacy.html" target="_blank" rel="noopener noreferrer">Политика конфиденциальности</a></li>
         <li><a href="terms.html">Пользовательское соглашение</a></li>
       </ul>
       <p class="footer__copy">© 2027 Звук Фест. Все права защищены.</p>
     </div>
   </div>
 </footer>
+<script src="js/api.js"></script>
 <script src="js/script.js"></script>
+<script src="js/cart-widget.js"></script>
+<script src="js/slider.js"></script>
 </body>
 </html>

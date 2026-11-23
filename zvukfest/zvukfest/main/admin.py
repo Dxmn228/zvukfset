@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import (Category, Feedback, Product, ProductImage, ProductProperty,
-                     User, UserAction, UserSession)
+                     User, UserAction, UserSession, Order, OrderItem)
 
 
 class PropertyInline(admin.TabularInline):
@@ -16,8 +16,8 @@ class ImageInline(admin.TabularInline):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'available', 'manufacturer_id')   # по клику на заголовок колонки идёт сортировка
-    list_editable = ('price', 'available')
+    list_display = ('name', 'price', 'discount_percent', 'available', 'manufacturer_id')
+    list_editable = ('price', 'discount_percent', 'available')
     list_filter = ('available', 'categories')
     search_fields = ('name', 'description')
     filter_horizontal = ('categories',)
@@ -59,3 +59,23 @@ class FeedbackAdmin(admin.ModelAdmin):        # модерация обраще�
 
 admin.site.register(UserAction)
 admin.site.register(UserSession)
+
+
+class OrderItemInline(admin.TabularInline):
+    model = OrderItem
+    extra = 0
+    readonly_fields = ('product', 'name', 'price', 'unit_price', 'quantity')
+    can_delete = False
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'created_at', 'status', 'total')
+    readonly_fields = ('user', 'request_id', 'created_at', 'status', 'subtotal', 'discount', 'total')
+    inlines = [OrderItemInline]
+
+    def has_add_permission(self, request):
+        return False

@@ -33,15 +33,43 @@ function renderProducts(items, isSearch = false) {
   }
   for (const p of items) {
     const row = document.createElement('tr');
-    const price = p.price === 0 ? 'Бесплатно' : p.price.toLocaleString('ru-RU') + ' ₽';
+    const price = Number(p.unit_price) === 0 ? 'Бесплатно' : Number(p.unit_price).toLocaleString('ru-RU') + ' ₽' + (p.discount_percent ? ` (−${p.discount_percent}%)` : '');
     const action = makeCell('');
     const button = document.createElement('button');
     button.type = 'button'; button.className = 'button button_theme_green';
     button.textContent = p.available ? 'В корзину' : 'Распродано'; button.disabled = !p.available;
     button.addEventListener('click', () => addToCart(p, button)); action.append(button);
     row.append(makeCell(p.name, 'th'), makeCell(p.short_description), makeCell(price), action);
+    const details = document.createElement('button'); details.type = 'button'; details.className = 'ticket-details';
+    details.textContent = 'Подробнее'; details.setAttribute('aria-label', `Подробнее: ${p.name}`);
+    details.onclick = () => showTicket(p.id); row.children[1].append(document.createElement('br'), details);
     body.append(row);
   }
+}
+
+const ticketDialog = document.createElement('dialog'); ticketDialog.className = 'shop-dialog'; ticketDialog.id = 'ticket-dialog';
+ticketDialog.setAttribute('aria-labelledby', 'ticket-dialog-title');
+ticketDialog.innerHTML = '<button type="button" class="button button_theme_dark dialog-close">Закрыть</button><h2 id="ticket-dialog-title">Описание билета</h2><div id="ticket-description" role="status"></div>';
+document.body.append(ticketDialog);
+ticketDialog.querySelector('button').onclick = () => ticketDialog.close();
+async function showTicket(id) {
+  ticketDialog.showModal();
+  const description = ticketDialog.querySelector('#ticket-description'); description.textContent = 'Загружаем…';
+  try {
+    const result = await api(`/api/products/${id}`);
+    if (!result.ok) throw new Error();
+    const p = result.body; ticketDialog.querySelector('h2').textContent = p.name;
+    description.replaceChildren();
+    const text = document.createElement('p'); text.textContent = p.description || p.short_description; description.append(text);
+    for (const prop of p.properties) {
+      const line = document.createElement('p'); line.textContent = `${prop.property_name}: ${prop.property_value}`; description.append(line);
+    }
+    for (const picture of p.images) {
+      const url = new URL(picture.image, location.href);
+      if (url.origin !== location.origin || !url.pathname.startsWith('/img/')) continue;
+      const img = document.createElement('img'); img.src = url.href; img.alt = picture.title || p.name; description.append(img);
+    }
+  } catch { description.textContent = 'Не удалось загрузить описание. Закройте окно и повторите попытку.'; }
 }
 
 // Форма поиска

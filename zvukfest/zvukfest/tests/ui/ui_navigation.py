@@ -15,7 +15,16 @@ def test_navigation_and_document_links(ui_page, live_server):
     for filename in ['program.html', 'artists.html', 'tickets.html', 'cart.html', 'index.html',
                      'privacy.html', 'terms.html', 'tickets.html', 'cart.html', 'privacy.html', 'index.html']:
         nav = ui_page.locator('.footer__legal' if filename in ('privacy.html', 'terms.html') else '#main-nav')
-        nav.locator(f'a[href="{filename}"]').click()
+        link = nav.locator(f'a[href="{filename}"]')
+        if filename == 'privacy.html':
+            with ui_page.expect_popup() as popup_info:
+                link.click()
+            popup = popup_info.value
+            expect(popup).to_have_url(live_server.url + '/' + filename)
+            expect(popup.locator('main h1')).to_be_visible()
+            popup.close()
+            continue
+        link.click()
         expect(ui_page).to_have_url(live_server.url + '/' + filename)
         expect(ui_page.locator('main h1')).to_be_visible()
         assert ui_page.locator('#main-nav a').evaluate_all('(links) => links.map(a => a.getAttribute("href"))') == MENU

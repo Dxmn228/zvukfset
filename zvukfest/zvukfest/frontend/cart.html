@@ -38,7 +38,7 @@
 <ul id="cart-items" class="cart-items" aria-label="Билеты в корзине"></ul>
 <aside class="cart-summary" aria-labelledby="summary-title"><h2 id="summary-title">Ваш выбор</h2>
 <p>Количество билетов: <strong id="cart-count">0</strong></p><p class="cart-total">Итого <strong id="cart-total">0 ₽</strong></p>
-<p>Оформление заказа и онлайн-оплата пока недоступны. Выбор сохраняется в корзине; наличие и цена могут измениться.</p>
+<p>Без скидки: <strong id="cart-subtotal">0 ₽</strong></p><p>Скидка: <strong id="cart-discount">0 ₽</strong></p><p>Учебное оформление: заказ появится в личном кабинете. Оплата и выдача настоящих билетов не производятся.</p><button class="button button_theme_green" type="button" id="cart-checkout">Оформить учебный заказ</button>
 <a class="button button_theme_green" href="tickets.html">Добавить билеты</a><button class="button button_theme_dark" type="button" id="cart-clear">Очистить корзину</button></aside></div>
 <noscript>Для работы корзины включите JavaScript.</noscript>
 </div></section></main>
@@ -65,7 +65,7 @@
         <li><a href="#">YouTube</a></li>
       </ul>
       <ul class="footer__legal">
-        <li><a href="privacy.html">Политика конфиденциальности</a></li>
+        <li><a href="privacy.html" target="_blank" rel="noopener noreferrer">Политика конфиденциальности</a></li>
         <li><a href="terms.html">Пользовательское соглашение</a></li>
       </ul>
       <p class="footer__copy">© 2027 Звук Fest. Все права защищены.</p>
@@ -74,6 +74,7 @@
 </footer>
 <script src="js/api.js"></script>
 <script src="js/script.js"></script>
+<script src="js/cart-widget.js"></script>
 <script src="js/cart.js"></script>
 </body>
 </html>
