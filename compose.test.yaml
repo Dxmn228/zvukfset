@@ -1,0 +1,19 @@
+# Isolated PostgreSQL for tests. Started with a unique project name by the runner.
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: zvukfest_tests
+      POSTGRES_USER: test_runner
+      POSTGRES_PASSWORD: local-test-only-password
+    ports:
+      - "127.0.0.1:${TEST_POSTGRES_PORT:?Use scripts/run_postgres_tests.py}:5432"
+    volumes:
+      - test_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test_runner -d zvukfest_tests"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+volumes:
+  test_data:

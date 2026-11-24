@@ -10,6 +10,11 @@ from main.models import Product, User
 TEST_PASSWORD = 'Browser-test-password-123'
 
 
+@pytest.fixture
+def browser_test_password():
+    return TEST_PASSWORD
+
+
 @pytest.fixture(scope='session', autouse=True)
 def join_live_server_requests():
     # Django's daemon request threads can outlive pytest-django's shared SQLite
