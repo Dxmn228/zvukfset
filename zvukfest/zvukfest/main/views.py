@@ -68,15 +68,19 @@ def api_login_required(view):
 
 
 def start_session(request, user, remember=True):
-    login(request, user)                     # создаёт сессию и обновляет last_login
-    if not remember:
-        request.session.set_expiry(0)        # сессия живёт до закрытия браузера
-    UserSession.objects.create(
-        user=user,
+    login(request, user)
+    request.session.set_expiry(None if remember else 0)
+    # При смене аккаунта login() сбрасывает ключ. Сохраняем новую сессию
+    # до записи в журнал, не дожидаясь SessionMiddleware на выходе из view.
+    request.session.save()
+    UserSession.objects.update_or_create(
         session_token=request.session.session_key,
-        ip_address=request.META.get('REMOTE_ADDR'),
-        user_agent=request.META.get('HTTP_USER_AGENT', '')[:255],
-        expires_at=request.session.get_expiry_date(),
+        defaults={
+            'user': user,
+            'ip_address': request.META.get('REMOTE_ADDR'),
+            'user_agent': request.META.get('HTTP_USER_AGENT', '')[:255],
+            'expires_at': request.session.get_expiry_date(),
+        },
     )
     cart_payload(request)
 
@@ -135,6 +139,7 @@ def health(request):
 
 # ---------- регистрация / вход / выход ----------
 @require_http_methods(['POST'])
+@transaction.atomic
 def register(request):
     form = RegisterForm(get_json(request))
     if not form.is_valid():
@@ -148,6 +153,7 @@ def register(request):
 
 
 @require_http_methods(['POST'])
+@transaction.atomic
 def login_view(request):
     form = LoginForm(get_json(request))
     if not form.is_valid():
