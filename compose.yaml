@@ -34,8 +34,10 @@ services:
       DB_PORT: "5432"
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?Set DJANGO_SECRET_KEY in .env}
       DJANGO_LOAD_DOTENV: "false"
-      DJANGO_DEBUG: "true"
-      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,[::1]
+      DJANGO_DEBUG: ${DJANGO_DEBUG:-true}
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-localhost,127.0.0.1,[::1],zvukfest.de3.netrun.io}
+      DJANGO_CSRF_TRUSTED_ORIGINS: ${DJANGO_CSRF_TRUSTED_ORIGINS:-https://zvukfest.de3.netrun.io}
+      DJANGO_COOKIE_SECURE: ${DJANGO_COOKIE_SECURE:-false}
     ports:
       - "127.0.0.1:8000:8000"
     command:

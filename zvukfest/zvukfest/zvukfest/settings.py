@@ -11,9 +11,17 @@ SECRET_KEY = required_env('DJANGO_SECRET_KEY')
 DEBUG = os.environ.get('DJANGO_DEBUG', 'true').lower() in ('true', '1', 'yes')
 ALLOWED_HOSTS = [
     host.strip()
-    for host in os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,[::1]').split(',')
+    for host in os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,[::1],zvukfest.de3.netrun.io').split(',')
     if host.strip()
 ]
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.environ.get('DJANGO_CSRF_TRUSTED_ORIGINS', 'https://zvukfest.de3.netrun.io').split(',')
+    if origin.strip()
+]
+# Enable for an HTTPS-only deployment; keep local HTTP available by default.
+SESSION_COOKIE_SECURE = os.environ.get('DJANGO_COOKIE_SECURE', 'false').lower() in ('true', '1', 'yes')
+CSRF_COOKIE_SECURE = SESSION_COOKIE_SECURE
 
 INSTALLED_APPS = [
     'django.contrib.admin',
