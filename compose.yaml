@@ -38,12 +38,15 @@ services:
       DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-localhost,127.0.0.1,[::1],zvukfest.de3.netrun.io}
       DJANGO_CSRF_TRUSTED_ORIGINS: ${DJANGO_CSRF_TRUSTED_ORIGINS:-https://zvukfest.de3.netrun.io}
       DJANGO_COOKIE_SECURE: ${DJANGO_COOKIE_SECURE:-false}
+      DJANGO_SUPERUSER_EMAIL: ${DJANGO_SUPERUSER_EMAIL:-}
+      DJANGO_SUPERUSER_NAME: ${DJANGO_SUPERUSER_NAME:-}
+      DJANGO_SUPERUSER_PASSWORD: ${DJANGO_SUPERUSER_PASSWORD:-}
     ports:
       - "127.0.0.1:8000:8000"
     command:
       - sh
       - -c
-      - python manage.py migrate --noinput && exec python manage.py runserver 0.0.0.0:8000 --noreload
+      - python manage.py migrate --noinput && python manage.py bootstrap_admin && exec python manage.py runserver 0.0.0.0:8000 --noreload
 
 volumes:
   postgres_data:
