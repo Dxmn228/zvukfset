@@ -296,6 +296,7 @@ def cart_payload(request):
         subtotal += p.price * row.quantity
         total += unit_price * row.quantity
         items.append({'product_id': p.id, 'name': p.name, 'price': str(p.price),
+                      'image': p.image,
                       'unit_price': str(unit_price), 'discount_percent': p.discount_percent,
                       'quantity': row.quantity, 'available': p.available,
                       'line_total': str(unit_price * row.quantity)})

@@ -4,6 +4,13 @@ function getCookie(name) {
   return row ? decodeURIComponent(row.split('=')[1]) : '';
 }
 
+// Изображения билетов берём только из локальной папки сайта.
+function ticketImage(value) {
+  const path = String(value || '').trim();
+  if (/^(?:\/)?img\/[\w./-]+$/i.test(path)) return '/' + path.replace(/^\/+/, '');
+  return '';
+}
+
 // Запрос к API: возвращает {ok, status, body}
 let apiQueue = Promise.resolve();
 function api(url, method = 'GET', data = null) {

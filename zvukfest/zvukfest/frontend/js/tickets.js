@@ -33,13 +33,20 @@ function renderProducts(items, isSearch = false) {
   }
   for (const p of items) {
     const row = document.createElement('tr');
+    const ticketCell = makeCell('', 'th');
+    const image = document.createElement('img');
+    const imagePath = ticketImage(p.image);
+    image.className = 'ticket-image'; image.src = imagePath;
+    image.alt = ''; image.setAttribute('aria-hidden', 'true'); image.loading = 'lazy';
+    if (imagePath) ticketCell.append(image);
+    ticketCell.append(document.createTextNode(p.name));
     const price = Number(p.unit_price) === 0 ? 'Бесплатно' : Number(p.unit_price).toLocaleString('ru-RU') + ' ₽' + (p.discount_percent ? ` (−${p.discount_percent}%)` : '');
     const action = makeCell('');
     const button = document.createElement('button');
     button.type = 'button'; button.className = 'button button_theme_green';
     button.textContent = p.available ? 'В корзину' : 'Распродано'; button.disabled = !p.available;
     button.addEventListener('click', () => addToCart(p, button)); action.append(button);
-    row.append(makeCell(p.name, 'th'), makeCell(p.short_description), makeCell(price), action);
+    row.append(ticketCell, makeCell(p.short_description), makeCell(price), action);
     const details = document.createElement('button'); details.type = 'button'; details.className = 'ticket-details';
     details.textContent = 'Подробнее'; details.setAttribute('aria-label', `Подробнее: ${p.name}`);
     details.onclick = () => showTicket(p.id); row.children[1].append(document.createElement('br'), details);

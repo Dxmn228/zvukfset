@@ -18,6 +18,10 @@
     message.textContent = cart.items.length ? '' : 'Корзина пока пуста.';
     for (const item of cart.items) {
       const row = document.createElement('li'); row.className = 'mini-cart-item';
+      const image = document.createElement('img');
+      const imagePath = ticketImage(item.image);
+      image.className = 'mini-cart-item__image'; image.src = imagePath;
+      image.alt = ''; image.setAttribute('aria-hidden', 'true'); image.loading = 'lazy';
       const text = document.createElement('p'); text.textContent = `${item.name} × ${item.quantity} — ${money(item.line_total)}`;
       const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'button button_theme_dark';
       remove.textContent = 'Удалить'; remove.setAttribute('aria-label', `Удалить из окна корзины: ${item.name}`);
@@ -29,7 +33,7 @@
         } catch { message.textContent = 'Нет связи с сервером. Повторите попытку.'; }
         finally { busy = false; remove.disabled = false; }
       };
-      row.append(text, remove); list.append(row);
+      row.append(...(imagePath ? [image] : []), text, remove); list.append(row);
     }
     dialog.querySelector('#mini-cart-totals').textContent = `Без скидки: ${money(cart.subtotal)}. Скидка: ${money(cart.discount)}. Итого: ${money(cart.total)}.`;
   }

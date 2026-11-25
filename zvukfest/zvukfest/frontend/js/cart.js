@@ -12,6 +12,10 @@ function render() {
   list.replaceChildren();
   for (const item of items) {
     const row = document.createElement('li'); row.className = 'cart-item';
+    const image = document.createElement('img');
+    const imagePath = ticketImage(item.image);
+    image.className = 'cart-item__image'; image.src = imagePath;
+    image.alt = ''; image.setAttribute('aria-hidden', 'true'); image.loading = 'lazy';
     const title = document.createElement('h3'); title.textContent = item.name;
     const price = document.createElement('p'); price.textContent = money(item.unit_price) + ' за билет' + (item.discount_percent ? ` (скидка ${item.discount_percent}%)` : '') + (!item.available ? ' — больше недоступен' : '');
     const controls = document.createElement('div'); controls.className = 'cart-controls';
@@ -26,7 +30,7 @@ function render() {
       button('+','Увеличить количество',() => change(1),item.quantity >= 20),
       button('Удалить','Удалить',() => save(items.filter(i => i.product_id !== item.product_id))));
     const subtotal = document.createElement('strong'); subtotal.textContent = money(item.line_total);
-    row.append(title,price,controls,subtotal); list.append(row);
+    row.append(...(imagePath ? [image] : []), title,price,controls,subtotal); list.append(row);
   }
   document.querySelector('#cart-total').textContent = money(CartCache.current?.total || 0);
   document.querySelector('#cart-subtotal').textContent = money(CartCache.current?.subtotal || 0);

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Изображение билета фестиваля">
+  <rect width="640" height="360" rx="32" fill="#b9ff66"/>
+  <path d="M80 80h480v200H80z" fill="#191a23"/>
+  <path d="M150 130h220v22H150zm0 48h320v14H150zm0 38h180v14H150z" fill="#fff"/>
+  <circle cx="475" cy="180" r="52" fill="#b9ff66"/>
+  <path d="M455 180h40m-20-20v40" stroke="#191a23" stroke-width="12" stroke-linecap="round"/>
+</svg>
