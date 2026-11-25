@@ -81,6 +81,27 @@ class Site:
         raise AssertionError('Redirect loop')
 
 
+def wait_until_ready(base, budget=60, interval=2, clock=time.monotonic, sleep=time.sleep, site_factory=Site):
+    """Wait for a sleeping instance, without retrying application/auth/TLS failures."""
+    started = clock()
+    deadline = started + budget
+    attempts = 0
+    last_status = None
+    while clock() < deadline:
+        client = site_factory(base, timeout=max(.1, min(20, deadline - clock())))
+        response = client.request('/')
+        attempts += 1
+        last_status = response.status
+        if last_status == 200:
+            return {'attempts': attempts, 'seconds': round(clock() - started, 3)}
+        if last_status not in (502, 503, 504):
+            raise AssertionError(f'Homepage returned HTTP {last_status}; startup wait stopped')
+        remaining = deadline - clock()
+        if remaining > 0:
+            sleep(min(interval, remaining))
+    raise AssertionError(f'Homepage not ready within {budget}s; last HTTP {last_status}, attempts: {attempts}')
+
+
 class Document(HTMLParser):
     def __init__(self, html):
         super().__init__()

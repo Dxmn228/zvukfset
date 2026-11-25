@@ -1,9 +1,11 @@
 import os
+import json
+import time
 from pathlib import Path
 from urllib.parse import urlsplit
 
 import pytest
-from playwright.sync_api import expect
+from playwright.sync_api import expect, TimeoutError as PlaywrightTimeoutError
 
 from hosting_support import PAGES
 
@@ -72,13 +74,67 @@ def test_hosted_responsive_layout(hosted_page, site_url, browser_name, path, wid
     assert not overflow, f'Horizontal overflow on {path} at {width}px'
 
 
-def test_homepage_load_budget(hosted_page, site_url, pytestconfig, record_property):
-    # The session fixture woke the service; report warm browser load separately.
-    hosted_page.goto(site_url + '/', wait_until='load')
-    hosted_page.wait_for_function('performance.getEntriesByType("navigation")[0].loadEventEnd > 0')
-    seconds = hosted_page.evaluate('performance.getEntriesByType("navigation")[0].loadEventEnd / 1000')
-    record_property('homepage_load_seconds', round(seconds, 3))
-    assert seconds <= pytestconfig.getoption('--hosting-load-seconds'), f'Homepage load took {seconds:.2f}s'
+def test_homepage_load_budget(hosted_page, site_url, pytestconfig, record_property, browser_name, awake):
+    # Warm server, fresh browser cache. Do not replace full load with DOM-ready
+    # or discard third-party resources to make the 3-second requirement pass.
+    timeout = False
+    pending = {}
+    started_at = time.monotonic()
+
+    def started(request):
+        pending[id(request)] = (request.url, time.monotonic())
+
+    def finished(request):
+        pending.pop(id(request), None)
+
+    hosted_page.on('request', started)
+    hosted_page.on('requestfinished', finished)
+    hosted_page.on('requestfailed', finished)
+    try:
+        response = hosted_page.goto(site_url + '/', wait_until='commit')
+        assert response is not None and response.status == 200, 'Homepage must return HTTP 200 before measuring load'
+        hosted_page.wait_for_load_state('load', timeout=30000)
+        hosted_page.wait_for_function('performance.getEntriesByType("navigation")[0].loadEventEnd > 0')
+    except PlaywrightTimeoutError:
+        timeout = True
+    finally:
+        hosted_page.remove_listener('request', started)
+        hosted_page.remove_listener('requestfinished', finished)
+        hosted_page.remove_listener('requestfailed', finished)
+    metrics = hosted_page.evaluate('''() => {
+        const n = performance.getEntriesByType('navigation')[0];
+        const resources = performance.getEntriesByType('resource').map(r => {
+            const u = new URL(r.name); return {
+                url: u.origin + u.pathname, type: r.initiatorType,
+                duration_ms: Math.round(r.duration), end_ms: Math.round(r.responseEnd),
+                transfer_bytes: r.transferSize, encoded_bytes: r.encodedBodySize,
+                third_party: u.origin !== location.origin
+            };
+        }).sort((a,b) => b.end_ms - a.end_ms);
+        return {ttfb_ms: n ? Math.round(n.responseStart) : null,
+            dom_ready_ms: n ? Math.round(n.domContentLoadedEventEnd) : null,
+            load_ms: n ? Math.round(n.loadEventEnd) : null, resources};
+    }''')
+    budget = pytestconfig.getoption('--hosting-load-seconds')
+    metrics.update(browser=browser_name, budget_seconds=budget, load_timeout=timeout,
+                   server_warmup=awake, browser_cache='fresh',
+                   elapsed_seconds=round(time.monotonic() - started_at, 3),
+                   pending=[{'url': urlsplit(url)._replace(query='', fragment='').geturl(),
+                             'elapsed_seconds': round(time.monotonic() - start, 3)}
+                            for url, start in pending.values()])
+    directory = Path('artifacts/hosting/performance')
+    directory.mkdir(parents=True, exist_ok=True)
+    report = directory / f'homepage-{browser_name}.json'
+    report.write_text(json.dumps(metrics, ensure_ascii=False, indent=2), encoding='utf-8')
+    record_property('homepage_performance_report', str(report))
+    assert not timeout, f'Homepage did not finish loading in time. Pending resources: {len(pending)}; details: {report}'
+    assert metrics['load_ms'], f'Browser did not report full page load; details: {report}'
+    seconds = metrics['load_ms'] / 1000
+    record_property('homepage_load_seconds', seconds)
+    assert seconds <= budget, (
+        f'Homepage load took {seconds:.2f}s (limit {budget:.2f}s; '
+        f'TTFB {metrics["ttfb_ms"]}ms, DOM ready {metrics["dom_ready_ms"]}ms). Details: {report}'
+    )
 
 
 def test_native_registration_validation_and_policy_links(hosted_page, site_url):

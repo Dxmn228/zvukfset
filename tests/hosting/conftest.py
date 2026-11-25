@@ -3,7 +3,7 @@ from urllib.parse import urlsplit
 
 import pytest
 
-from hosting_support import PAGES, Site
+from hosting_support import PAGES, Site, wait_until_ready
 from hosting_accounts import new_account, registration, record_account
 from hosting_browser import hosted_page  # Shared real-browser fixture for both UI modules.
 
@@ -37,9 +37,8 @@ def site_url(pytestconfig):
 
 @pytest.fixture(scope='session')
 def awake(site_url):
-    # Allow a sleeping free instance to start once; normal requests use 20 s.
-    result = Site(site_url, timeout=60).request('/')
-    assert result.status == 200, f'Homepage warm-up returned HTTP {result.status}'
+    # Netrun returns a temporary 503 HTML page while its container wakes up.
+    return wait_until_ready(site_url)
 
 
 @pytest.fixture
