@@ -13,7 +13,7 @@ function render() {
   for (const item of items) {
     const row = document.createElement('li'); row.className = 'cart-item';
     const image = document.createElement('img');
-    const imagePath = ticketImage(item.image);
+    const imagePath = typeof ticketImage === 'function' ? ticketImage(item.image) : '';
     image.className = 'cart-item__image'; image.src = imagePath;
     image.alt = ''; image.setAttribute('aria-hidden', 'true'); image.loading = 'lazy';
     const title = document.createElement('h3'); title.textContent = item.name;

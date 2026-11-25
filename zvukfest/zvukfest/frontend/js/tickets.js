@@ -35,7 +35,9 @@ function renderProducts(items, isSearch = false) {
     const row = document.createElement('tr');
     const ticketCell = makeCell('', 'th');
     const image = document.createElement('img');
-    const imagePath = ticketImage(p.image);
+    // Совместимость со старым кэшем api.js: отсутствие helper-а не должно
+    // останавливать загрузку и отображение всего списка билетов.
+    const imagePath = typeof ticketImage === 'function' ? ticketImage(p.image) : '';
     image.className = 'ticket-image'; image.src = imagePath;
     image.alt = ''; image.setAttribute('aria-hidden', 'true'); image.loading = 'lazy';
     if (imagePath) ticketCell.append(image);

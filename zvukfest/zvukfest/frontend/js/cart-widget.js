@@ -19,7 +19,7 @@
     for (const item of cart.items) {
       const row = document.createElement('li'); row.className = 'mini-cart-item';
       const image = document.createElement('img');
-      const imagePath = ticketImage(item.image);
+      const imagePath = typeof ticketImage === 'function' ? ticketImage(item.image) : '';
       image.className = 'mini-cart-item__image'; image.src = imagePath;
       image.alt = ''; image.setAttribute('aria-hidden', 'true'); image.loading = 'lazy';
       const text = document.createElement('p'); text.textContent = `${item.name} × ${item.quantity} — ${money(item.line_total)}`;
