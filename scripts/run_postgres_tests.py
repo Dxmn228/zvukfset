@@ -30,7 +30,7 @@ def main():
         port = run('port', 'db', '5432', capture=True).stdout.strip().rsplit(':', 1)[1]
         env = {**os.environ, 'TEST_POSTGRES_PORT': port, 'TEST_POSTGRES_CONTAINER': container,
                'TEST_POSTGRES_PROJECT': project, 'PYTHONIOENCODING': 'utf-8'}
-        result = subprocess.run([sys.executable, '-m', 'pytest', '-c', 'pytest.ini',
+        result = subprocess.run([sys.executable, '-m', 'pytest', '-c', 'pytest.local.ini',
                                  '--ds=zvukfest.settings_test_postgres', '-p', 'no:cacheprovider', '-q',
                                  '--tb=short', '-o', 'faulthandler_timeout=45', *sys.argv[1:]], cwd=ROOT, env=env)
         return result.returncode

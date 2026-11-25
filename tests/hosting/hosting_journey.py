@@ -6,7 +6,7 @@ import pytest
 
 from hosting_support import Site
 
-pytestmark = pytest.mark.writes
+pytestmark = [pytest.mark.writes, pytest.mark.functional]
 
 
 def test_registration_session_cart_order_and_relogin(site, site_url, record_property):
@@ -24,9 +24,11 @@ def test_registration_session_cart_order_and_relogin(site, site_url, record_prop
     response = site.request('/api/register', 'POST', registration, csrf=True)
     assert response.status == 201, f'Registration returned HTTP {response.status}'
     cookie = site.cookie('sessionid')
-    assert cookie and cookie.secure, 'Session cookie must be Secure'
-    assert cookie.has_nonstandard_attr('HttpOnly'), 'Session cookie must be HttpOnly'
-    assert cookie.get_nonstandard_attr('SameSite', '').lower() in ('lax', 'strict')
+    cookie_flags = {
+        'Secure': cookie is not None and cookie.secure,
+        'HttpOnly': cookie is not None and cookie.has_nonstandard_attr('HttpOnly'),
+        'SameSite': cookie is not None and cookie.get_nonstandard_attr('SameSite', '').lower() in ('lax', 'strict'),
+    }
     assert site.request('/api/profile').json()['email'] == email
     profile = site.request('/api/profile', 'PUT', {'name': 'Hosting test updated', 'email': email}, csrf=True)
     assert profile.status == 200
@@ -65,3 +67,6 @@ def test_registration_session_cart_order_and_relogin(site, site_url, record_prop
     history = resumed.request('/api/orders').json()['items']
     assert [item['id'] for item in history] == [order_id]
     assert resumed.request('/api/logout', 'POST', {}, csrf=True).status == 200
+    # Check security after the journey and logout; never include cookie values in reports.
+    for flag, enabled in cookie_flags.items():
+        assert enabled, f'Session cookie must set {flag}'

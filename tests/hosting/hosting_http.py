@@ -134,7 +134,8 @@ def test_valid_origin_reaches_form_validation(site, path):
 def test_secure_csrf_cookie_and_headers(site):
     response = site.request('/tickets.html')
     cookie = site.cookie('csrftoken')
-    assert cookie is not None and cookie.secure, 'Set DJANGO_COOKIE_SECURE=true on HTTPS hosting'
+    secure = cookie is not None and cookie.secure
+    assert secure, 'Set DJANGO_COOKIE_SECURE=true on HTTPS hosting'
     assert cookie.get_nonstandard_attr('SameSite', '').lower() in ('lax', 'strict')
     assert response.headers.get('X-Content-Type-Options', '').lower() == 'nosniff'
     assert response.headers.get('X-Frame-Options', '').upper() in ('DENY', 'SAMEORIGIN')

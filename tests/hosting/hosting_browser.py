@@ -31,8 +31,11 @@ def hosted_page(page, site_url, awake):
 
     def check_failure(request):
         target = urlsplit(request.url)
-        if target.netloc == urlsplit(site_url).netloc and request.failure != 'net::ERR_ABORTED':
-            problems.append('Failed request: ' + target.path)
+        # Page navigation can cancel pending fetches/resources. Chromium and
+        # Firefox use different names for this normal cancellation.
+        cancelled = request.failure in ('net::ERR_ABORTED', 'NS_BINDING_ABORTED')
+        if target.netloc == urlsplit(site_url).netloc and not cancelled:
+            problems.append(f'Failed request: {target.path} ({request.failure})')
 
     page.on('request', check_request)
     page.on('response', check_response)
