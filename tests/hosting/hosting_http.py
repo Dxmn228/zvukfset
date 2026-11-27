@@ -97,14 +97,14 @@ def test_all_permanent_artist_tickets_have_schedule_and_images(site):
     assert response.status == 200
     items = {item['alias']: item for item in response.json()['items']}
     expected = {
-        'shaman-standard': ('Шаман', 'img/shaman.jpg'),
-        'shaman-vip': ('Шаман', 'img/shaman.jpg'),
-        'vanya-standard': ('Ваня Дмитриенко', 'img/vanya.jpg'),
-        'vanya-vip': ('Ваня Дмитриенко', 'img/vanya.jpg'),
-        'stas-standard': ('Стас Михайлов', 'img/stas.jpg'),
-        'stas-vip': ('Стас Михайлов', 'img/stas.jpg'),
-        'anna-standard': ('Анна Асти', 'img/anna.jpg'),
-        'anna-vip': ('Анна Асти', 'img/anna.jpg'),
+        'shaman-standard': ('Шаман', 'img/ticket-dance-floor.png'),
+        'shaman-vip': ('Шаман', 'img/ticket-vip-zone.png'),
+        'vanya-standard': ('Ваня Дмитриенко', 'img/ticket-dance-floor.png'),
+        'vanya-vip': ('Ваня Дмитриенко', 'img/ticket-vip-zone.png'),
+        'stas-standard': ('Стас Михайлов', 'img/ticket-dance-floor.png'),
+        'stas-vip': ('Стас Михайлов', 'img/ticket-vip-zone.png'),
+        'anna-standard': ('Анна Асти', 'img/ticket-dance-floor.png'),
+        'anna-vip': ('Анна Асти', 'img/ticket-vip-zone.png'),
     }
     assert set(expected) <= set(items), 'Published catalogue is missing permanent tickets'
 

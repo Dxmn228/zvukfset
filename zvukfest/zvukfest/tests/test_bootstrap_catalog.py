@@ -13,14 +13,14 @@ from main.models import Category, Product
 pytestmark = pytest.mark.django_db
 
 EXPECTED = {
-    'shaman-standard': ('Шаман', '2500.00', 'img/shaman.jpg'),
-    'shaman-vip': ('Шаман', '4500.00', 'img/shaman.jpg'),
-    'vanya-standard': ('Ваня Дмитриенко', '2200.00', 'img/vanya.jpg'),
-    'vanya-vip': ('Ваня Дмитриенко', '3900.00', 'img/vanya.jpg'),
-    'stas-standard': ('Стас Михайлов', '3500.00', 'img/stas.jpg'),
-    'stas-vip': ('Стас Михайлов', '6500.00', 'img/stas.jpg'),
-    'anna-standard': ('Анна Асти', '3000.00', 'img/anna.jpg'),
-    'anna-vip': ('Анна Асти', '5500.00', 'img/anna.jpg'),
+    'shaman-standard': ('Шаман', '2500.00', 'img/ticket-dance-floor.png'),
+    'shaman-vip': ('Шаман', '4500.00', 'img/ticket-vip-zone.png'),
+    'vanya-standard': ('Ваня Дмитриенко', '2200.00', 'img/ticket-dance-floor.png'),
+    'vanya-vip': ('Ваня Дмитриенко', '3900.00', 'img/ticket-vip-zone.png'),
+    'stas-standard': ('Стас Михайлов', '3500.00', 'img/ticket-dance-floor.png'),
+    'stas-vip': ('Стас Михайлов', '6500.00', 'img/ticket-vip-zone.png'),
+    'anna-standard': ('Анна Асти', '3000.00', 'img/ticket-dance-floor.png'),
+    'anna-vip': ('Анна Асти', '5500.00', 'img/ticket-vip-zone.png'),
 }
 
 SCHEDULE = {

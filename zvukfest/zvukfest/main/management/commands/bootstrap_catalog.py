@@ -8,10 +8,13 @@ from django.core.management.base import BaseCommand
 from main.models import Category, Product
 
 
+STANDARD_TICKET_IMAGE = 'img/ticket-dance-floor.png'
+VIP_TICKET_IMAGE = 'img/ticket-vip-zone.png'
+
+
 ARTISTS = (
     {
         'name': 'Шаман', 'alias': 'shaman', 'date': date(2027, 7, 16), 'time': time(18, 0),
-        'image': 'img/shaman.jpg',
         'tickets': (
             ('shaman-standard', 'Билет на выступление Шамана', 'Танцпол и доступ на выступление', Decimal('2500.00')),
             ('shaman-vip', 'VIP-билет на выступление Шамана', 'VIP-зона и отдельный вход', Decimal('4500.00')),
@@ -19,7 +22,7 @@ ARTISTS = (
     },
     {
         'name': 'Ваня Дмитриенко', 'alias': 'vanya-dmitrienko', 'date': date(2027, 7, 16),
-        'time': time(19, 30), 'image': 'img/vanya.jpg',
+        'time': time(19, 30),
         'tickets': (
             ('vanya-standard', 'Билет на выступление Вани Дмитриенко', 'Танцпол и доступ на выступление', Decimal('2200.00')),
             ('vanya-vip', 'VIP-билет на выступление Вани Дмитриенко', 'VIP-зона и отдельный вход', Decimal('3900.00')),
@@ -27,7 +30,7 @@ ARTISTS = (
     },
     {
         'name': 'Стас Михайлов', 'alias': 'stas-mikhaylov', 'date': date(2027, 7, 16),
-        'time': time(21, 0), 'image': 'img/stas.jpg',
+        'time': time(21, 0),
         'tickets': (
             ('stas-standard', 'Билет на выступление Стаса Михайлова', 'Танцпол и доступ на выступление', Decimal('3500.00')),
             ('stas-vip', 'VIP-билет на выступление Стаса Михайлова', 'VIP-зона и отдельный вход', Decimal('6500.00')),
@@ -35,7 +38,7 @@ ARTISTS = (
     },
     {
         'name': 'Анна Асти', 'alias': 'anna-asti', 'date': date(2027, 7, 16),
-        'time': time(22, 30), 'image': 'img/anna.jpg',
+        'time': time(22, 30),
         'tickets': (
             ('anna-standard', 'Билет на выступление Анны Асти', 'Танцпол и доступ на выступление', Decimal('3000.00')),
             ('anna-vip', 'VIP-билет на выступление Анны Асти', 'VIP-зона и отдельный вход', Decimal('5500.00')),
@@ -70,6 +73,7 @@ class Command(BaseCommand):
                     Category.objects.filter(pk=category.pk).update(**missing)
 
             for alias, name, description, price in artist['tickets']:
+                ticket_image = VIP_TICKET_IMAGE if alias.endswith('-vip') else STANDARD_TICKET_IMAGE
                 product, product_created = Product.objects.get_or_create(
                     alias=alias,
                     defaults={
@@ -77,13 +81,13 @@ class Command(BaseCommand):
                         'short_description': description,
                         'description': f'{description}. Выступление артиста: {artist["name"]}.',
                         'price': price,
-                        'image': artist['image'],
+                        'image': ticket_image,
                         'available': True,
                     },
                 )
                 created_tickets += int(product_created)
                 if not product.image:
-                    Product.objects.filter(pk=product.pk).update(image=artist['image'])
+                    Product.objects.filter(pk=product.pk).update(image=ticket_image)
                 product.categories.add(category)
 
         self.stdout.write(self.style.SUCCESS(

@@ -46,13 +46,6 @@ function renderProducts(items, isSearch = false) {
     categorySection.className = 'ticket-category';
     const categoryHeader = document.createElement('header');
     categoryHeader.className = 'ticket-category__header';
-    const categoryImagePath = typeof ticketImage === 'function' ? ticketImage(products[0]?.image) : '';
-    if (categoryImagePath) {
-      const categoryImage = document.createElement('img');
-      categoryImage.className = 'ticket-category__image';
-      categoryImage.src = categoryImagePath; categoryImage.alt = ''; categoryImage.setAttribute('aria-hidden', 'true');
-      categoryHeader.append(categoryImage);
-    }
     const categoryText = document.createElement('div');
     categoryText.className = 'ticket-category__text';
     const categoryTitle = document.createElement('h3');
