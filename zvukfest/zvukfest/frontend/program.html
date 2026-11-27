@@ -6,7 +6,7 @@
   <title>Программа — Звук Фест</title>
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/global.css">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=6">
 </head>
 <body>
 <header class="header">
@@ -30,98 +30,104 @@
   </div>
 </header>
 <main>
-  <section class="section">
-    <div class="container">
-      <h1>Программа</h1>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container">
-      <h2 class="section__title">Пятница, 16 июля</h2>
-      <div class="table-wrap">
-        <table class="table">
-          <thead>
-            <tr>
-              <th class="table__head" scope="col">Время</th>
-              <th class="table__head" scope="col">Артист</th>
-              <th class="table__head" scope="col">Сцена</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th class="table__cell" scope="row">12:00</th>
-              <td class="table__cell">Мот</td>
-              <td class="table__cell">Малая сцена</td>
-            </tr>
-            <tr>
-              <th class="table__cell" scope="row">13:30</th>
-              <td class="table__cell">Zivert</td>
-              <td class="table__cell">Главная сцена</td>
-            </tr>
-            <tr>
-              <th class="table__cell" scope="row">15:00</th>
-              <td class="table__cell">Ваня Дмитриенко</td>
-              <td class="table__cell">Главная сцена</td>
-            </tr>
-            <tr>
-              <th class="table__cell" scope="row">16:30</th>
-              <td class="table__cell">Shaman</td>
-              <td class="table__cell">Главная сцена</td>
-            </tr>
-          </tbody>
-        </table>
+  <section class="program-hero">
+    <div class="container program-hero__inner">
+      <p class="program-hero__eyebrow">16 июля 2027 · Москва</p>
+      <h1 class="program-hero__title">Программа фестиваля</h1>
+      <p class="program-hero__lead">Один вечер, четыре больших выступления и пространство, в котором между концертами тоже есть чем заняться.</p>
+      <div class="program-hero__actions">
+        <a class="button button_theme_green" href="#lineup">Смотреть расписание</a>
+        <a class="program-hero__link" href="tickets.html">Выбрать билеты</a>
       </div>
     </div>
   </section>
 
-<section class="schedule">
-  <h2 class="section__title">Летние выступления</h2>
-
-  <div class="schedule__table-wrapper">
-    <table class="schedule__table">
-      <thead>
-        <tr>
-          <th>Дата</th>
-          <th>Время</th>
-          <th>Артист</th>
-          <th>Сцена</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr>
-          <td>20 июня</td>
-          <td>18:00</td>
-          <td>Группа «Север»</td>
-          <td>Главная сцена</td>
-        </tr>
-        <tr>
-          <td>21 июня</td>
-          <td>19:30</td>
-          <td>Маяк</td>
-          <td>Малая сцена</td>
-        </tr>
-        <tr>
-          <td>22 июня</td>
-          <td>20:00</td>
-          <td>Звуковой дождь</td>
-          <td>Главная сцена</td>
-        </tr>
-        <tr>
-          <td>23 июня</td>
-          <td>22:00</td>
-          <td>Ночной ритм</td>
-          <td>Танцпол</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-  <section class="section">
+  <section class="section" aria-labelledby="day-title">
     <div class="container">
-      <aside class="note">
-        <p>Расписание может измениться. Актуальную версию публикуем в соцсетях фестиваля.</p>
+      <div class="section__head">
+        <h2 class="section__title" id="day-title">Как пройдёт день</h2>
+        <p class="section__text">Короткие ориентиры помогут спланировать приезд и не пропустить начало концертной программы.</p>
+      </div>
+      <ul class="program-facts">
+        <li class="program-fact">
+          <span class="program-fact__value">15:00</span>
+          <h3>Открытие входа</h3>
+          <p>Можно пройти контроль заранее, познакомиться с площадкой и выбрать удобное место.</p>
+        </li>
+        <li class="program-fact program-fact_theme_green">
+          <span class="program-fact__value">18:00</span>
+          <h3>Старт выступлений</h3>
+          <p>С этого времени концерты идут последовательно на главной сцене.</p>
+        </li>
+        <li class="program-fact program-fact_theme_dark">
+          <span class="program-fact__value">4</span>
+          <h3>Артиста за вечер</h3>
+          <p>Все заявленные исполнители выступают в рамках одной фестивальной программы.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section program-lineup" id="lineup" aria-labelledby="lineup-title">
+    <div class="container">
+      <div class="section__head">
+        <h2 class="section__title" id="lineup-title">Главная сцена</h2>
+        <p class="section__text">Пятница, 16 июля. Все выступления проходят последовательно, поэтому между артистами не придётся выбирать.</p>
+      </div>
+      <ol class="program-timeline">
+        <li class="program-slot">
+          <time class="program-slot__time" datetime="2027-07-16T18:00">18:00</time>
+          <div class="program-slot__content">
+            <p class="program-slot__label">Открытие концертной программы</p>
+            <h3>Шаман</h3>
+          </div>
+          <a class="program-slot__link" href="tickets.html">Билеты<span class="visually-hidden"> на выступление Шамана</span></a>
+        </li>
+        <li class="program-slot">
+          <time class="program-slot__time" datetime="2027-07-16T19:30">19:30</time>
+          <div class="program-slot__content">
+            <p class="program-slot__label">Главная сцена</p>
+            <h3>Ваня Дмитриенко</h3>
+          </div>
+          <a class="program-slot__link" href="tickets.html">Билеты<span class="visually-hidden"> на выступление Вани Дмитриенко</span></a>
+        </li>
+        <li class="program-slot">
+          <time class="program-slot__time" datetime="2027-07-16T21:00">21:00</time>
+          <div class="program-slot__content">
+            <p class="program-slot__label">Главная сцена</p>
+            <h3>Стас Михайлов</h3>
+          </div>
+          <a class="program-slot__link" href="tickets.html">Билеты<span class="visually-hidden"> на выступление Стаса Михайлова</span></a>
+        </li>
+        <li class="program-slot">
+          <time class="program-slot__time" datetime="2027-07-16T22:30">22:30</time>
+          <div class="program-slot__content">
+            <p class="program-slot__label">Финальное выступление</p>
+            <h3>Анна Асти</h3>
+          </div>
+          <a class="program-slot__link" href="tickets.html">Билеты<span class="visually-hidden"> на выступление Анны Асти</span></a>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="spaces-title">
+    <div class="container">
+      <div class="section__head">
+        <h2 class="section__title" id="spaces-title">Между выступлениями</h2>
+        <p class="section__text">Три полезные зоны рядом с концертной площадкой — достаточно, чтобы сделать паузу и быстро вернуться к сцене.</p>
+      </div>
+      <ul class="program-spaces">
+        <li><span aria-hidden="true">01</span><div><h3>Фуд-корт</h3><p>Еда, напитки и столики для короткого отдыха.</p></div></li>
+        <li><span aria-hidden="true">02</span><div><h3>Зона отдыха</h3><p>Более спокойное пространство вдали от основного звука.</p></div></li>
+        <li><span aria-hidden="true">03</span><div><h3>Мерч и фотозона</h3><p>Фестивальная атрибутика и место для памятных кадров.</p></div></li>
+      </ul>
+      <aside class="program-note">
+        <div>
+          <h2>Полезно знать</h2>
+          <p>Приходите заранее: на входе потребуется время для проверки билета и контроля безопасности. Расписание может корректироваться — актуальная версия всегда остаётся на этой странице.</p>
+        </div>
+        <a class="button button_theme_dark" href="tickets.html">Купить билет</a>
       </aside>
     </div>
   </section>
