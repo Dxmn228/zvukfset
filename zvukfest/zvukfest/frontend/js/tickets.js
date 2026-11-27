@@ -1,25 +1,18 @@
-function makeCell(text, tag = 'td') {
-  const cell = document.createElement(tag);
-  cell.className = 'table__cell';
-  if (tag === 'th') cell.scope = 'row';
-  cell.textContent = text;                         // textContent защищает от вставки html
-  return cell;
-}
-
 function showProductsMessage(message, retry = false) {
-  const row = document.createElement('tr');
-  const cell = makeCell(message);
-  cell.colSpan = 4;
+  const box = document.createElement('div');
+  box.className = 'ticket-message';
+  const text = document.createElement('p');
+  text.textContent = message;
+  box.append(text);
   if (retry) {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'button button_theme_dark';
     button.textContent = 'Повторить загрузку';
     button.addEventListener('click', () => loadProducts(searchForm.elements.query.value.trim()));
-    cell.append(document.createElement('br'), button);
+    box.append(button);
   }
-  row.append(cell);
-  document.querySelector('#products-body').replaceChildren(row);
+  document.querySelector('#products-body').replaceChildren(box);
 }
 
 function renderProducts(items, isSearch = false) {
@@ -49,13 +42,20 @@ function renderProducts(items, isSearch = false) {
   });
 
   for (const {category, products} of sortedGroups) {
-    const categoryRow = document.createElement('tr');
-    categoryRow.className = 'ticket-category';
-    const categoryCell = document.createElement('th');
-    categoryCell.className = 'ticket-category__cell';
-    categoryCell.scope = 'colgroup';
-    categoryCell.colSpan = 4;
-    const categoryTitle = document.createElement('strong');
+    const categorySection = document.createElement('section');
+    categorySection.className = 'ticket-category';
+    const categoryHeader = document.createElement('header');
+    categoryHeader.className = 'ticket-category__header';
+    const categoryImagePath = typeof ticketImage === 'function' ? ticketImage(products[0]?.image) : '';
+    if (categoryImagePath) {
+      const categoryImage = document.createElement('img');
+      categoryImage.className = 'ticket-category__image';
+      categoryImage.src = categoryImagePath; categoryImage.alt = ''; categoryImage.setAttribute('aria-hidden', 'true');
+      categoryHeader.append(categoryImage);
+    }
+    const categoryText = document.createElement('div');
+    categoryText.className = 'ticket-category__text';
+    const categoryTitle = document.createElement('h3');
     categoryTitle.className = 'ticket-category__title';
     categoryTitle.textContent = category.name;
     const details = [];
@@ -64,40 +64,56 @@ function renderProducts(items, isSearch = false) {
       details.push(date.toLocaleDateString('ru-RU', {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'}));
     }
     if (category.performance_time) details.push(category.performance_time);
-    if (category.performance_price !== null && category.performance_price !== undefined) {
-      details.push(`цена выступления: ${Number(category.performance_price).toLocaleString('ru-RU')} ₽`);
-    }
-    const categoryDetails = document.createElement('span');
+    const categoryDetails = document.createElement('p');
     categoryDetails.className = 'ticket-category__details';
     categoryDetails.textContent = details.join(' · ');
-    categoryCell.append(categoryTitle);
-    if (details.length) categoryCell.append(categoryDetails);
-    categoryRow.append(categoryCell);
-    body.append(categoryRow);
+    categoryText.append(categoryTitle);
+    if (details.length) categoryText.append(categoryDetails);
+    categoryHeader.append(categoryText);
+    const ticketGrid = document.createElement('div');
+    ticketGrid.className = 'ticket-grid';
+    categorySection.append(categoryHeader, ticketGrid);
+    body.append(categorySection);
 
     for (const p of products) {
-    const row = document.createElement('tr');
-    row.className = 'ticket-product';
-    const ticketCell = makeCell('', 'th');
+    const card = document.createElement('article');
+    card.className = 'ticket-card ticket-product';
     const image = document.createElement('img');
     // Совместимость со старым кэшем api.js: отсутствие helper-а не должно
     // останавливать загрузку и отображение всего списка билетов.
     const imagePath = typeof ticketImage === 'function' ? ticketImage(p.image) : '';
     image.className = 'ticket-image'; image.src = imagePath;
     image.alt = ''; image.setAttribute('aria-hidden', 'true'); image.loading = 'lazy';
-    if (imagePath) ticketCell.append(image);
-    ticketCell.append(document.createTextNode(p.name));
+    if (imagePath) card.append(image);
+    const cardBody = document.createElement('div');
+    cardBody.className = 'ticket-card__body';
+    const status = document.createElement('span');
+    status.className = p.available ? 'ticket-card__status' : 'ticket-card__status ticket-card__status_sold';
+    status.textContent = p.available ? 'В продаже' : 'Распродано';
+    const title = document.createElement('h4');
+    title.className = 'ticket-card__title'; title.textContent = p.name;
+    const description = document.createElement('p');
+    description.className = 'ticket-card__description'; description.textContent = p.short_description;
     const price = Number(p.unit_price) === 0 ? 'Бесплатно' : Number(p.unit_price).toLocaleString('ru-RU') + ' ₽' + (p.discount_percent ? ` (−${p.discount_percent}%)` : '');
-    const action = makeCell('');
+    const footer = document.createElement('div');
+    footer.className = 'ticket-card__footer';
+    const priceText = document.createElement('strong');
+    priceText.className = 'ticket-card__price'; priceText.textContent = price;
+    const actions = document.createElement('div');
+    actions.className = 'ticket-card__actions';
+    const detailsButton = document.createElement('button');
+    detailsButton.type = 'button'; detailsButton.className = 'ticket-details';
+    detailsButton.textContent = 'Подробнее'; detailsButton.setAttribute('aria-label', `Подробнее: ${p.name}`);
+    detailsButton.onclick = () => showTicket(p.id);
     const button = document.createElement('button');
     button.type = 'button'; button.className = 'button button_theme_green';
     button.textContent = p.available ? 'В корзину' : 'Распродано'; button.disabled = !p.available;
-    button.addEventListener('click', () => addToCart(p, button)); action.append(button);
-    row.append(ticketCell, makeCell(p.short_description), makeCell(price), action);
-    const details = document.createElement('button'); details.type = 'button'; details.className = 'ticket-details';
-    details.textContent = 'Подробнее'; details.setAttribute('aria-label', `Подробнее: ${p.name}`);
-    details.onclick = () => showTicket(p.id); row.children[1].append(document.createElement('br'), details);
-    body.append(row);
+    button.addEventListener('click', () => addToCart(p, button));
+    actions.append(detailsButton, button);
+    footer.append(priceText, actions);
+    cardBody.append(status, title, description, footer);
+    card.append(cardBody);
+    ticketGrid.append(card);
     }
   }
 }

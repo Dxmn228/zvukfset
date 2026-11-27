@@ -55,7 +55,6 @@ def product_data(p):
                 'alias': category.alias,
                 'performance_date': category.performance_date.isoformat() if category.performance_date else None,
                 'performance_time': category.performance_time.strftime('%H:%M') if category.performance_time else None,
-                'performance_price': str(category.performance_price) if category.performance_price is not None else None,
             } for category in p.categories.all()]}
 
 

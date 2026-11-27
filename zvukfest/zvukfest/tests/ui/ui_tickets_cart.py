@@ -42,14 +42,15 @@ def test_all_permanent_tickets_are_grouped_by_artist_and_have_images(ui_page, li
     expect(ui_page.locator('#products-body .ticket-product img.ticket-image')).to_have_count(8)
 
     expected = {
-        'Шаман': ('пятница, 16 июля 2027 г.', '18:00', '2 500'),
-        'Ваня Дмитриенко': ('пятница, 16 июля 2027 г.', '19:30', '2 200'),
-        'Стас Михайлов': ('пятница, 16 июля 2027 г.', '21:00', '3 500'),
-        'Анна Асти': ('пятница, 16 июля 2027 г.', '22:30', '3 000'),
+        'Шаман': ('пятница, 16 июля 2027 г.', '18:00'),
+        'Ваня Дмитриенко': ('пятница, 16 июля 2027 г.', '19:30'),
+        'Стас Михайлов': ('пятница, 16 июля 2027 г.', '21:00'),
+        'Анна Асти': ('пятница, 16 июля 2027 г.', '22:30'),
     }
     for artist, values in expected.items():
         category = ui_page.locator('.ticket-category').filter(has_text=artist)
         expect(category).to_have_count(1)
+        expect(category).not_to_contain_text('цена выступления')
         for value in values:
             expect(category).to_contain_text(value)
 

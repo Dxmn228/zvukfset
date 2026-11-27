@@ -24,10 +24,10 @@ EXPECTED = {
 }
 
 SCHEDULE = {
-    'Шаман': (time(18, 0), Decimal('2500.00')),
-    'Ваня Дмитриенко': (time(19, 30), Decimal('2200.00')),
-    'Стас Михайлов': (time(21, 0), Decimal('3500.00')),
-    'Анна Асти': (time(22, 30), Decimal('3000.00')),
+    'Шаман': time(18, 0),
+    'Ваня Дмитриенко': time(19, 30),
+    'Стас Михайлов': time(21, 0),
+    'Анна Асти': time(22, 30),
 }
 
 
@@ -52,10 +52,8 @@ def test_bootstrap_creates_every_permanent_ticket_with_schedule_and_image():
         assert (Path(settings.BASE_DIR) / 'frontend' / image).is_file()
 
         category = product.categories.get()
-        expected_time, expected_price = SCHEDULE[artist]
         assert category.performance_date == date(2027, 7, 16)
-        assert category.performance_time == expected_time
-        assert category.performance_price == expected_price
+        assert category.performance_time == SCHEDULE[artist]
 
 
 def test_bootstrap_is_idempotent_and_preserves_admin_changes():
@@ -66,7 +64,6 @@ def test_bootstrap_is_idempotent_and_preserves_admin_changes():
     product.price = Decimal('7777.00')
     product.save()
     category.performance_time = time(17, 45)
-    category.performance_price = Decimal('7000.00')
     category.save()
 
     assert '0 tickets created' in bootstrap_catalog()
@@ -77,7 +74,6 @@ def test_bootstrap_is_idempotent_and_preserves_admin_changes():
     assert product.name == 'Изменённый администратором билет'
     assert product.price == Decimal('7777.00')
     assert category.performance_time == time(17, 45)
-    assert category.performance_price == Decimal('7000.00')
 
 
 def test_all_permanent_tickets_are_returned_by_api_and_can_be_added_to_cart(client, account_user):
@@ -95,8 +91,8 @@ def test_all_permanent_tickets_are_returned_by_api_and_can_be_added_to_cart(clie
         category = item['categories'][0]
         assert category['name'] == artist
         assert category['performance_date'] == '2027-07-16'
-        assert category['performance_time'] == SCHEDULE[artist][0].strftime('%H:%M')
-        assert Decimal(category['performance_price']) == SCHEDULE[artist][1]
+        assert category['performance_time'] == SCHEDULE[artist].strftime('%H:%M')
+        assert 'performance_price' not in category
 
     client.force_login(account_user)
     selection = [{'product_id': item['id'], 'quantity': 1} for item in items.values()]

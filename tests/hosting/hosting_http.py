@@ -117,7 +117,7 @@ def test_all_permanent_artist_tickets_have_schedule_and_images(site):
         assert category['name'] == artist
         assert category['performance_date'] == '2027-07-16'
         assert category['performance_time']
-        assert category['performance_price']
+        assert 'performance_price' not in category
         image_response = site.request('/' + image)
         assert image_response.status == 200
         assert image_response.headers.get('Content-Type', '').startswith('image/')

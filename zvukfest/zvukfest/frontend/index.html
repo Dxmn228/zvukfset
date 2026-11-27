@@ -6,7 +6,7 @@
   <title>Музыкальный фестиваль — Звук Фест</title>
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/global.css">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=4">
 </head>
 <body>
 <header class="header">
@@ -30,6 +30,21 @@
   </div>
 </header>
 <main>
+  <section class="festival-hero" aria-labelledby="festival-title">
+    <img class="festival-hero__image" src="img/main-stage.jpg" alt="" aria-hidden="true">
+    <div class="festival-hero__shade"></div>
+    <div class="container festival-hero__inner">
+      <p class="festival-hero__eyebrow">16 июля 2027 · Москва · Парк Горького</p>
+      <h1 class="festival-hero__title" id="festival-title">Звук<br>Фест</h1>
+      <p class="festival-hero__lead">Большой летний день живой музыки в центре города</p>
+      <p class="festival-hero__artists">Шаман · Ваня Дмитриенко · Стас Михайлов · Анна Асти</p>
+      <div class="festival-hero__actions">
+        <a class="button button_theme_green festival-hero__button" href="tickets.html">Выбрать билет</a>
+        <a class="festival-hero__program" href="program.html">Смотреть программу <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+
 <section class="section"><div class="container festival-slider" role="region" aria-roledescription="слайдер" aria-label="Атмосфера фестиваля">
 <h2 class="section__title">Три повода приехать</h2>
 <article class="festival-slide"><img src="img/main-stage.jpg" alt="Главная сцена фестиваля"><div><h3>Живая музыка</h3><p>Любимые артисты и большой звук на главной сцене.</p><a href="program.html">Посмотреть программу</a></div></article>
@@ -37,18 +52,6 @@
 <article class="festival-slide" hidden><img src="img/food-court.jpg" alt="Фудкорт фестиваля"><div><h3>Целый день впечатлений</h3><p>Еда, отдых и новые знакомства между выступлениями.</p><a href="tickets.html">Выбрать билет</a></div></article>
 <div class="slider-controls"><button class="button button_theme_dark" type="button" data-prev aria-label="Предыдущий слайд">Назад</button><p role="status" aria-live="polite">Слайд 1 из 3</p><button class="button button_theme_dark" type="button" data-next aria-label="Следующий слайд">Далее</button></div>
 </div></section>
-  <section class="section">
-    <div class="container cover">
-      <div class="cover__text">
-        <h1 class="cover__title">Живая музыки в центре Москвы</h1>
-        <div class="cover__description">
-          <p>16 июля 2027, Парк Горького. Шаман, Ваня Дмитриенко, Стас Михайлов,а также Анна Асти.</p>
-          <a class="button button_theme_dark" href="tickets.html">Купить билет</a>
-        </div>
-      </div>
-      <img class="cover__image" src="img/hero.svg" alt="Иллюстрация: звезда, кольца и ноты" width="500" height="420">
-    </div>
-  </section>
 
   <section class="section">
     <div class="container">

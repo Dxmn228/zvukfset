@@ -11,7 +11,7 @@ from main.models import Category, Product
 ARTISTS = (
     {
         'name': 'Шаман', 'alias': 'shaman', 'date': date(2027, 7, 16), 'time': time(18, 0),
-        'price': Decimal('2500.00'), 'image': 'img/shaman.jpg',
+        'image': 'img/shaman.jpg',
         'tickets': (
             ('shaman-standard', 'Билет на выступление Шамана', 'Танцпол и доступ на выступление', Decimal('2500.00')),
             ('shaman-vip', 'VIP-билет на выступление Шамана', 'VIP-зона и отдельный вход', Decimal('4500.00')),
@@ -19,7 +19,7 @@ ARTISTS = (
     },
     {
         'name': 'Ваня Дмитриенко', 'alias': 'vanya-dmitrienko', 'date': date(2027, 7, 16),
-        'time': time(19, 30), 'price': Decimal('2200.00'), 'image': 'img/vanya.jpg',
+        'time': time(19, 30), 'image': 'img/vanya.jpg',
         'tickets': (
             ('vanya-standard', 'Билет на выступление Вани Дмитриенко', 'Танцпол и доступ на выступление', Decimal('2200.00')),
             ('vanya-vip', 'VIP-билет на выступление Вани Дмитриенко', 'VIP-зона и отдельный вход', Decimal('3900.00')),
@@ -27,7 +27,7 @@ ARTISTS = (
     },
     {
         'name': 'Стас Михайлов', 'alias': 'stas-mikhaylov', 'date': date(2027, 7, 16),
-        'time': time(21, 0), 'price': Decimal('3500.00'), 'image': 'img/stas.jpg',
+        'time': time(21, 0), 'image': 'img/stas.jpg',
         'tickets': (
             ('stas-standard', 'Билет на выступление Стаса Михайлова', 'Танцпол и доступ на выступление', Decimal('3500.00')),
             ('stas-vip', 'VIP-билет на выступление Стаса Михайлова', 'VIP-зона и отдельный вход', Decimal('6500.00')),
@@ -35,7 +35,7 @@ ARTISTS = (
     },
     {
         'name': 'Анна Асти', 'alias': 'anna-asti', 'date': date(2027, 7, 16),
-        'time': time(22, 30), 'price': Decimal('3000.00'), 'image': 'img/anna.jpg',
+        'time': time(22, 30), 'image': 'img/anna.jpg',
         'tickets': (
             ('anna-standard', 'Билет на выступление Анны Асти', 'Танцпол и доступ на выступление', Decimal('3000.00')),
             ('anna-vip', 'VIP-билет на выступление Анны Асти', 'VIP-зона и отдельный вход', Decimal('5500.00')),
@@ -57,7 +57,6 @@ class Command(BaseCommand):
                     'name': artist['name'],
                     'performance_date': artist['date'],
                     'performance_time': artist['time'],
-                    'performance_price': artist['price'],
                 },
             )
             created_categories += int(created)
@@ -67,8 +66,6 @@ class Command(BaseCommand):
                     missing['performance_date'] = artist['date']
                 if category.performance_time is None:
                     missing['performance_time'] = artist['time']
-                if category.performance_price is None:
-                    missing['performance_price'] = artist['price']
                 if missing:
                     Category.objects.filter(pk=category.pk).update(**missing)
 

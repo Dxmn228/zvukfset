@@ -30,8 +30,8 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'performance_date', 'performance_time', 'performance_price', 'alias')
-    list_editable = ('performance_date', 'performance_time', 'performance_price')
+    list_display = ('name', 'performance_date', 'performance_time', 'alias')
+    list_editable = ('performance_date', 'performance_time')
     search_fields = ('name', 'alias')
 
 

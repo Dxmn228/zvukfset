@@ -8,8 +8,6 @@ class Category(models.Model):
     alias = models.SlugField('Алиас', max_length=255, unique=True)
     performance_date = models.DateField('Дата выступления', null=True, blank=True)
     performance_time = models.TimeField('Время выступления', null=True, blank=True)
-    performance_price = models.DecimalField(
-        'Цена выступления', max_digits=20, decimal_places=2, null=True, blank=True)
 
     class Meta:
         db_table = 'categories'
