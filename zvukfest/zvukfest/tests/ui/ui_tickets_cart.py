@@ -15,7 +15,7 @@ def test_search_and_sold_out_ticket(ui_page, live_server, catalogue):
     expect(rows.first).to_contain_text('VIP-билет')
     ui_page.locator('#search-query').fill('Несуществующий билет')
     search.get_by_role('button', name='Найти', exact=True).click()
-    expect(ui_page.locator('#products-body tr').first).to_contain_text('По вашему запросу билеты не найдены')
+    expect(ui_page.locator('#products-body .ticket-message')).to_contain_text('По вашему запросу билеты не найдены')
     ui_page.locator('#search-query').fill('')
     search.get_by_role('button', name='Найти', exact=True).click()
     expect(rows).to_have_count(3)
@@ -40,6 +40,7 @@ def test_all_permanent_tickets_are_grouped_by_artist_and_have_images(ui_page, li
     expect(ui_page.locator('#products-body .ticket-category')).to_have_count(4)
     expect(ui_page.locator('#products-body .ticket-product')).to_have_count(8)
     expect(ui_page.locator('#products-body .ticket-product img.ticket-image')).to_have_count(8)
+    expect(ui_page.locator('#products-body .ticket-category__header img')).to_have_count(0)
 
     expected = {
         'Шаман': ('пятница, 16 июля 2027 г.', '18:00'),
@@ -54,16 +55,17 @@ def test_all_permanent_tickets_are_grouped_by_artist_and_have_images(ui_page, li
         for value in values:
             expect(category).to_contain_text(value)
 
-    for alias in ('shaman', 'vanya', 'stas', 'anna'):
-        assert ui_page.locator(f'.ticket-product img[src="/img/{alias}.jpg"]').count() == 2
+    expect(ui_page.locator('.ticket-product img[src="/img/ticket-dance-floor.png"]')).to_have_count(4)
+    expect(ui_page.locator('.ticket-product img[src="/img/ticket-vip-zone.png"]')).to_have_count(4)
 
 
 def test_cart_add_change_remove_and_clear(signed_in_page, live_server, catalogue):
     page = signed_in_page
     page.goto(live_server.url + '/tickets.html')
     for name in ('Обычный билет', 'VIP-билет'):
-        row = page.locator('#products-body tr').filter(has=page.get_by_role('rowheader', name=name, exact=True))
-        row.get_by_role('button', name='В корзину', exact=True).click()
+        card = page.locator('#products-body .ticket-product').filter(
+            has=page.get_by_role('heading', name=name, exact=True))
+        card.get_by_role('button', name='В корзину', exact=True).click()
         expect(page.locator('.search-form .form__status')).to_contain_text('Билет добавлен')
     page.locator('#main-nav a[href="cart.html"]').click()
     expect(page.locator('#cart-count')).to_have_text('2')

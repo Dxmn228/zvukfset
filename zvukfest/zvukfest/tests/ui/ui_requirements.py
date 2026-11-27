@@ -32,8 +32,9 @@ def test_details_cart_popup_cache_and_order(signed_in_page, live_server, catalog
     page.get_by_role('button', name='Подробнее: Обычный билет', exact=True).click()
     expect(page.locator('#ticket-description')).to_contain_text('Один день фестиваля')
     page.keyboard.press('Escape')
-    row = page.locator('#products-body tr').filter(has=page.get_by_role('rowheader', name='Обычный билет', exact=True))
-    row.get_by_role('button', name='В корзину', exact=True).click()
+    card = page.locator('#products-body .ticket-product').filter(
+        has=page.get_by_role('heading', name='Обычный билет', exact=True))
+    card.get_by_role('button', name='В корзину', exact=True).click()
     expect(page.locator('#cart-badge')).to_have_text('1')
     cached = page.evaluate('(id) => JSON.parse(localStorage.getItem(`zvukfest.cart.${id}`))', registered_user.pk)
     assert cached['total'] == '60.30'
@@ -42,7 +43,7 @@ def test_details_cart_popup_cache_and_order(signed_in_page, live_server, catalog
     page.get_by_role('button', name='Удалить из окна корзины: Обычный билет', exact=True).click()
     expect(page.locator('#cart-badge')).to_have_text('0')
     page.keyboard.press('Escape')
-    row.get_by_role('button', name='В корзину', exact=True).click()
+    card.get_by_role('button', name='В корзину', exact=True).click()
     expect(page.locator('#cart-badge')).to_have_text('1')
     page.goto(live_server.url + '/cart.html')
     expect(page.locator('#cart-count')).to_have_text('1')

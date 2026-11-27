@@ -72,6 +72,22 @@ def test_profile_password_and_logout_in_browser(signed_page, account, site_url):
     expect(page).to_have_url(site_url + '/account.html')
 
 
+def test_account_uses_new_profile_activity_and_order_panels(signed_page):
+    page = signed_page
+    hero = page.locator('.page-hero')
+    expect(hero.get_by_role('heading', name='Личный кабинет')).to_be_visible()
+    expect(hero.locator('#account-info')).to_contain_text('Роль: пользователь')
+    expect(page.locator('#profile-form')).to_be_visible()
+    expect(page.locator('form[name=password]')).to_be_visible()
+    activity = page.locator('.account-activity .account-card')
+    expect(activity).to_have_count(3)
+    assert activity.get_by_role('heading').all_text_contents() == [
+        'Журнал действий', 'Просмотренные билеты', 'История поиска',
+    ]
+    expect(page.locator('.account-panel').get_by_role('heading', name='Мои обращения')).to_be_visible()
+    expect(page.locator('#orders').get_by_role('heading', name='История заказов')).to_be_visible()
+
+
 def test_feedback_form_and_safe_rendering(signed_page, account, site_url):
     page = signed_page
     message = 'Hosting UI <b>plain text</b> check'
@@ -95,13 +111,14 @@ def test_ticket_details_cart_controls_and_demo_order(signed_page, hosted_ticket,
     name = hosted_ticket['name']
     page.goto(site_url + '/tickets.html')
     # Real catalogue names/prices are used; no fixture products are inserted.
-    row = page.locator('#products-body tr').filter(has=page.get_by_role('rowheader', name=name, exact=True)).first
-    row.get_by_role('button', name='Подробнее: ' + name, exact=True).click()
+    card = page.locator('#products-body .ticket-product').filter(
+        has=page.get_by_role('heading', name=name, exact=True)).first
+    card.get_by_role('button', name='Подробнее: ' + name, exact=True).click()
     expect(page.locator('#ticket-dialog')).to_be_visible()
     expect(page.locator('#ticket-description')).not_to_contain_text('Загружаем')
     expect(page.locator('#ticket-description')).not_to_contain_text('Не удалось')
     page.keyboard.press('Escape')
-    row.get_by_role('button', name='В корзину', exact=True).click()
+    card.get_by_role('button', name='В корзину', exact=True).click()
     expect(page.locator('#cart-badge')).to_have_text('1')
     page.goto(site_url + '/cart.html')
     expect(page.locator('#cart-count')).to_have_text('1')
@@ -115,7 +132,7 @@ def test_ticket_details_cart_controls_and_demo_order(signed_page, hosted_ticket,
     expect(page.locator('#cart-empty')).to_be_visible()
     for clear_only in (True, False):
         page.goto(site_url + '/tickets.html')
-        row.get_by_role('button', name='В корзину', exact=True).click()
+        card.get_by_role('button', name='В корзину', exact=True).click()
         expect(page.locator('#cart-badge')).to_have_text('1')
         page.goto(site_url + '/cart.html')
         if clear_only:

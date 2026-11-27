@@ -64,7 +64,10 @@ def test_mobile_menu_works_with_keyboard(ui_page, live_server):
 
 
 @pytest.mark.parametrize('width', [360, 768, 1440])
-@pytest.mark.parametrize('filename', ['tickets.html', 'cart.html', 'account.html', 'privacy.html'])
+@pytest.mark.parametrize('filename', [
+    'index.html', 'program.html', 'artists.html', 'tickets.html',
+    'cart.html', 'account.html', 'privacy.html', 'terms.html',
+])
 def test_responsive_layout(ui_page, live_server, sign_in, registered_user, catalogue, width, filename, pytestconfig, browser_name):
     ui_page.set_viewport_size({'width': width, 'height': 900})
     if filename in ('cart.html', 'account.html'):
@@ -73,7 +76,7 @@ def test_responsive_layout(ui_page, live_server, sign_in, registered_user, catal
     ui_page.goto(live_server.url + '/' + filename)
     expect(ui_page.locator('main h1')).to_be_visible()
     if filename == 'tickets.html':
-        expect(ui_page.locator('#products-body tr')).to_have_count(3)
+        expect(ui_page.locator('#products-body .ticket-product')).to_have_count(3)
     elif filename == 'cart.html':
         expect(ui_page.locator('#cart-clear')).to_be_visible()
     elif filename == 'account.html':

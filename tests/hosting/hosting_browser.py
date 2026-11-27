@@ -56,7 +56,57 @@ def test_pages_in_real_browser(hosted_page, site_url, path):
     if path == '/tickets.html':
         expect(hosted_page.locator('#products-body')).not_to_have_attribute('aria-busy', 'true')
         expect(hosted_page.locator('#products-body')).not_to_contain_text('Не удалось')
-        expect(hosted_page.locator('#products-body tr').first).to_be_visible()
+        expect(hosted_page.locator('#products-body .ticket-product').first).to_be_visible()
+
+
+def test_published_pages_use_shared_festival_heroes(hosted_page, site_url):
+    expected = {
+        '/tickets.html': ('Билеты', '16 июля 2027 · Парк Горького'),
+        '/artists.html': ('Артисты', 'Главная сцена · 16 июля 2027'),
+        '/cart.html': ('Корзина', 'Ваш выбор'),
+        '/privacy.html': ('Политика конфиденциальности', 'Документы сайта'),
+        '/terms.html': ('Пользовательское соглашение', 'Документы сайта'),
+    }
+    for path, (title, eyebrow) in expected.items():
+        hosted_page.goto(site_url + path)
+        hero = hosted_page.locator('.page-hero')
+        expect(hero).to_be_visible()
+        expect(hero.get_by_role('heading', level=1)).to_have_text(title)
+        expect(hero.locator('.page-hero__eyebrow')).to_have_text(eyebrow)
+        assert hero.evaluate('element => parseFloat(getComputedStyle(element).borderRadius)') > 0
+
+
+def test_published_program_has_all_new_content_blocks(hosted_page, site_url):
+    hosted_page.goto(site_url + '/program.html')
+    expect(hosted_page.locator('.program-hero')).to_be_visible()
+    expect(hosted_page.locator('.program-fact')).to_have_count(3)
+    slots = hosted_page.locator('.program-slot')
+    expect(slots).to_have_count(4)
+    assert slots.locator('time').all_text_contents() == ['18:00', '19:30', '21:00', '22:30']
+    assert slots.get_by_role('heading').all_text_contents() == [
+        'Шаман', 'Ваня Дмитриенко', 'Стас Михайлов', 'Анна Асти',
+    ]
+    expect(hosted_page.locator('.program-spaces li')).to_have_count(3)
+    expect(hosted_page.locator('.program-note').get_by_role(
+        'link', name='Купить билет')).to_have_attribute('href', 'tickets.html')
+
+
+def test_published_artist_and_legal_cards_are_complete(hosted_page, site_url):
+    hosted_page.goto(site_url + '/artists.html')
+    cards = hosted_page.locator('.artist')
+    expect(cards).to_have_count(4)
+    expect(cards.locator('.artist__photo')).to_have_count(4)
+    expect(cards.locator('.artist__time')).to_have_count(4)
+    expect(cards.get_by_role('link', name='Выбрать билет')).to_have_count(4)
+    assert cards.locator('.artist__photo').evaluate_all(
+        'images => images.every(image => image.complete && image.naturalWidth > 0)')
+
+    for path in ('/privacy.html', '/terms.html'):
+        hosted_page.goto(site_url + path)
+        document = hosted_page.locator('.legal-page')
+        expect(document.locator('.legal-page__notice')).to_contain_text('Учебный проект')
+        expect(document.locator('.legal-page__contents li')).to_have_count(6)
+        expect(document.locator(':scope > section')).to_have_count(6)
 
 
 @pytest.mark.parametrize('width', [360, 768, 1440])
