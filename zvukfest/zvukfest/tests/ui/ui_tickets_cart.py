@@ -5,7 +5,7 @@ from main.models import CartItem
 
 def test_search_and_sold_out_ticket(ui_page, live_server, catalogue):
     ui_page.goto(live_server.url + '/tickets.html')
-    rows = ui_page.locator('#products-body tr')
+    rows = ui_page.locator('#products-body .ticket-product')
     expect(rows).to_have_count(3)
     expect(ui_page.get_by_role('button', name='Распродано', exact=True)).to_be_disabled()
     search = ui_page.locator('.search-form')
@@ -15,7 +15,7 @@ def test_search_and_sold_out_ticket(ui_page, live_server, catalogue):
     expect(rows.first).to_contain_text('VIP-билет')
     ui_page.locator('#search-query').fill('Несуществующий билет')
     search.get_by_role('button', name='Найти', exact=True).click()
-    expect(rows.first).to_contain_text('По вашему запросу билеты не найдены')
+    expect(ui_page.locator('#products-body tr').first).to_contain_text('По вашему запросу билеты не найдены')
     ui_page.locator('#search-query').fill('')
     search.get_by_role('button', name='Найти', exact=True).click()
     expect(rows).to_have_count(3)
@@ -29,7 +29,32 @@ def test_catalogue_error_can_be_retried(ui_page, live_server, catalogue):
     expect(retry).to_be_visible()
     ui_page.unroute(pattern)
     retry.click()
-    expect(ui_page.locator('#products-body tr')).to_have_count(3)
+    expect(ui_page.locator('#products-body .ticket-product')).to_have_count(3)
+
+
+def test_all_permanent_tickets_are_grouped_by_artist_and_have_images(ui_page, live_server):
+    from django.core.management import call_command
+
+    call_command('bootstrap_catalog')
+    ui_page.goto(live_server.url + '/tickets.html')
+    expect(ui_page.locator('#products-body .ticket-category')).to_have_count(4)
+    expect(ui_page.locator('#products-body .ticket-product')).to_have_count(8)
+    expect(ui_page.locator('#products-body .ticket-product img.ticket-image')).to_have_count(8)
+
+    expected = {
+        'Шаман': ('пятница, 16 июля 2027 г.', '18:00', '2 500'),
+        'Ваня Дмитриенко': ('пятница, 16 июля 2027 г.', '19:30', '2 200'),
+        'Стас Михайлов': ('пятница, 16 июля 2027 г.', '21:00', '3 500'),
+        'Анна Асти': ('пятница, 16 июля 2027 г.', '22:30', '3 000'),
+    }
+    for artist, values in expected.items():
+        category = ui_page.locator('.ticket-category').filter(has_text=artist)
+        expect(category).to_have_count(1)
+        for value in values:
+            expect(category).to_contain_text(value)
+
+    for alias in ('shaman', 'vanya', 'stas', 'anna'):
+        assert ui_page.locator(f'.ticket-product img[src="/img/{alias}.jpg"]').count() == 2
 
 
 def test_cart_add_change_remove_and_clear(signed_in_page, live_server, catalogue):

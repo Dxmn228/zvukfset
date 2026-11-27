@@ -92,6 +92,37 @@ def test_catalogue_is_json_and_sorted(site):
     assert [row['price'] for row in items] == sorted(row['price'] for row in items)
 
 
+def test_all_permanent_artist_tickets_have_schedule_and_images(site):
+    response = site.request('/api/products')
+    assert response.status == 200
+    items = {item['alias']: item for item in response.json()['items']}
+    expected = {
+        'shaman-standard': ('Шаман', 'img/shaman.jpg'),
+        'shaman-vip': ('Шаман', 'img/shaman.jpg'),
+        'vanya-standard': ('Ваня Дмитриенко', 'img/vanya.jpg'),
+        'vanya-vip': ('Ваня Дмитриенко', 'img/vanya.jpg'),
+        'stas-standard': ('Стас Михайлов', 'img/stas.jpg'),
+        'stas-vip': ('Стас Михайлов', 'img/stas.jpg'),
+        'anna-standard': ('Анна Асти', 'img/anna.jpg'),
+        'anna-vip': ('Анна Асти', 'img/anna.jpg'),
+    }
+    assert set(expected) <= set(items), 'Published catalogue is missing permanent tickets'
+
+    for alias, (artist, image) in expected.items():
+        ticket = items[alias]
+        assert ticket['available']
+        assert ticket['image'] == image
+        assert len(ticket['categories']) == 1
+        category = ticket['categories'][0]
+        assert category['name'] == artist
+        assert category['performance_date'] == '2027-07-16'
+        assert category['performance_time']
+        assert category['performance_price']
+        image_response = site.request('/' + image)
+        assert image_response.status == 200
+        assert image_response.headers.get('Content-Type', '').startswith('image/')
+
+
 def test_search_and_policy_download(site):
     response = site.request('/api/search?q=hosting-check-no-match-9172')
     assert response.status == 200 and isinstance(response.json()['items'], list)

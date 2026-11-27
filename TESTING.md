@@ -96,6 +96,28 @@ python ../scripts/run_site_tests.py --suite ui -k cart
 python ../scripts/run_site_tests.py --collect-only -q
 ```
 
+## Проверки постоянных билетов
+
+После публикации новой версии проверка всех восьми обязательных билетов,
+категорий артистов, расписания и файлов изображений запускается командой:
+
+```bash
+python ../scripts/run_site_tests.py --suite checks -k permanent_artist_tickets
+```
+
+До публикации можно проверить создание каталога, повторный запуск команды,
+API, корзину, цены и резервные изображения в изолированной тестовой базе:
+
+```bash
+python -m pytest -c ../pytest.local.ini zvukfest/tests/test_bootstrap_catalog.py -q
+```
+
+Отображение всех категорий и билетов в Chromium и Firefox:
+
+```bash
+python -m pytest -c ../pytest.ui.local.ini zvukfest/tests/ui/ui_tickets_cart.py -k permanent_tickets
+```
+
 Другой опубликованный экземпляр:
 
 ```bash

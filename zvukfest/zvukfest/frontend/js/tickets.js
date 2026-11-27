@@ -77,6 +77,7 @@ function renderProducts(items, isSearch = false) {
 
     for (const p of products) {
     const row = document.createElement('tr');
+    row.className = 'ticket-product';
     const ticketCell = makeCell('', 'th');
     const image = document.createElement('img');
     // Совместимость со старым кэшем api.js: отсутствие helper-а не должно
