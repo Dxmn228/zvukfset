@@ -46,7 +46,7 @@ services:
     command:
       - sh
       - -c
-      - python manage.py migrate --noinput && python manage.py bootstrap_admin && exec python manage.py runserver 0.0.0.0:8000 --noreload
+      - python manage.py migrate --noinput && python manage.py bootstrap_catalog && python manage.py bootstrap_admin && exec python manage.py runserver 0.0.0.0:8000 --noreload
 
 volumes:
   postgres_data:

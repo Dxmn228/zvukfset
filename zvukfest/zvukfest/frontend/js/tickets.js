@@ -31,7 +31,51 @@ function renderProducts(items, isSearch = false) {
       : 'Билеты пока не добавлены. Загляните сюда позже.');
     return;
   }
-  for (const p of items) {
+
+  const groups = new Map();
+  for (const product of items) {
+    const category = Array.isArray(product.categories) && product.categories.length
+      ? product.categories[0]
+      : {id: 'other', name: 'Другие билеты', alias: 'other'};
+    const key = String(category.id ?? category.alias);
+    if (!groups.has(key)) groups.set(key, {category, products: []});
+    groups.get(key).products.push(product);
+  }
+
+  const sortedGroups = [...groups.values()].sort((left, right) => {
+    const leftSchedule = `${left.category.performance_date || '9999'} ${left.category.performance_time || '99:99'}`;
+    const rightSchedule = `${right.category.performance_date || '9999'} ${right.category.performance_time || '99:99'}`;
+    return leftSchedule.localeCompare(rightSchedule) || left.category.name.localeCompare(right.category.name, 'ru');
+  });
+
+  for (const {category, products} of sortedGroups) {
+    const categoryRow = document.createElement('tr');
+    categoryRow.className = 'ticket-category';
+    const categoryCell = document.createElement('th');
+    categoryCell.className = 'ticket-category__cell';
+    categoryCell.scope = 'colgroup';
+    categoryCell.colSpan = 4;
+    const categoryTitle = document.createElement('strong');
+    categoryTitle.className = 'ticket-category__title';
+    categoryTitle.textContent = category.name;
+    const details = [];
+    if (category.performance_date) {
+      const date = new Date(`${category.performance_date}T00:00:00`);
+      details.push(date.toLocaleDateString('ru-RU', {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'}));
+    }
+    if (category.performance_time) details.push(category.performance_time);
+    if (category.performance_price !== null && category.performance_price !== undefined) {
+      details.push(`цена выступления: ${Number(category.performance_price).toLocaleString('ru-RU')} ₽`);
+    }
+    const categoryDetails = document.createElement('span');
+    categoryDetails.className = 'ticket-category__details';
+    categoryDetails.textContent = details.join(' · ');
+    categoryCell.append(categoryTitle);
+    if (details.length) categoryCell.append(categoryDetails);
+    categoryRow.append(categoryCell);
+    body.append(categoryRow);
+
+    for (const p of products) {
     const row = document.createElement('tr');
     const ticketCell = makeCell('', 'th');
     const image = document.createElement('img');
@@ -53,6 +97,7 @@ function renderProducts(items, isSearch = false) {
     details.textContent = 'Подробнее'; details.setAttribute('aria-label', `Подробнее: ${p.name}`);
     details.onclick = () => showTicket(p.id); row.children[1].append(document.createElement('br'), details);
     body.append(row);
+    }
   }
 }
 
@@ -69,6 +114,12 @@ async function showTicket(id) {
     if (!result.ok) throw new Error();
     const p = result.body; ticketDialog.querySelector('h2').textContent = p.name;
     description.replaceChildren();
+    const primaryImage = typeof ticketImage === 'function' ? ticketImage(p.image) : '';
+    if (primaryImage) {
+      const image = document.createElement('img');
+      image.className = 'ticket-dialog__image'; image.src = primaryImage; image.alt = '';
+      image.setAttribute('aria-hidden', 'true'); description.append(image);
+    }
     const text = document.createElement('p'); text.textContent = p.description || p.short_description; description.append(text);
     for (const prop of p.properties) {
       const line = document.createElement('p'); line.textContent = `${prop.property_name}: ${prop.property_value}`; description.append(line);

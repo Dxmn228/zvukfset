@@ -16,17 +16,23 @@ class ImageInline(admin.TabularInline):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'discount_percent', 'available', 'manufacturer_id')
+    list_display = ('name', 'artist_categories', 'price', 'discount_percent', 'available', 'manufacturer_id')
     list_editable = ('price', 'discount_percent', 'available')
     list_filter = ('available', 'categories')
     search_fields = ('name', 'description')
     filter_horizontal = ('categories',)
     inlines = [PropertyInline, ImageInline]
 
+    @admin.display(description='Артисты')
+    def artist_categories(self, product):
+        return ', '.join(product.categories.values_list('name', flat=True)) or 'Без категории'
+
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'alias')
+    list_display = ('name', 'performance_date', 'performance_time', 'performance_price', 'alias')
+    list_editable = ('performance_date', 'performance_time', 'performance_price')
+    search_fields = ('name', 'alias')
 
 
 @admin.register(User)

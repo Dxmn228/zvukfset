@@ -48,7 +48,15 @@ def user_data(user):
 def product_data(p):
     return {'id': p.id, 'name': p.name, 'alias': p.alias, 'short_description': p.short_description,
             'price': float(p.price), 'unit_price': str(discounted_price(p)),
-            'discount_percent': p.discount_percent, 'image': p.image, 'available': p.available}
+            'discount_percent': p.discount_percent, 'image': p.image, 'available': p.available,
+            'categories': [{
+                'id': category.id,
+                'name': category.name,
+                'alias': category.alias,
+                'performance_date': category.performance_date.isoformat() if category.performance_date else None,
+                'performance_time': category.performance_time.strftime('%H:%M') if category.performance_time else None,
+                'performance_price': str(category.performance_price) if category.performance_price is not None else None,
+            } for category in p.categories.all()]}
 
 
 def log_action(request, action, page=None):
@@ -232,7 +240,7 @@ def feedback(request):
 # ---------- товары и поиск ----------
 @require_http_methods(['GET'])
 def products(request):
-    items = Product.objects.all()
+    items = Product.objects.prefetch_related('categories')
     if request.GET.get('category'):
         items = items.filter(categories__alias=request.GET['category'])
     sorting = {'price': 'price', '-price': '-price', 'name': 'name'}
@@ -262,8 +270,9 @@ def search(request):
     q = request.GET.get('q', '').strip()
     if not 2 <= len(q) <= 100:
         return JsonResponse({'errors': {'q': 'Введите от 2 до 100 символов'}}, status=400)
-    found = Product.objects.filter(
-        Q(name__icontains=q) | Q(short_description__icontains=q) | Q(description__icontains=q))[:20]
+    found = Product.objects.prefetch_related('categories').filter(
+        Q(name__icontains=q) | Q(short_description__icontains=q) |
+        Q(description__icontains=q) | Q(categories__name__icontains=q)).distinct()[:20]
     # История поиска (5 последних запросов) лежит в сессии
     history = [h for h in request.session.get('search_history', []) if h != q]
     request.session['search_history'] = ([q] + history)[:5]

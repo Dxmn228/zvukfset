@@ -6,6 +6,10 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 class Category(models.Model):
     name = models.CharField('Название', max_length=255)
     alias = models.SlugField('Алиас', max_length=255, unique=True)
+    performance_date = models.DateField('Дата выступления', null=True, blank=True)
+    performance_time = models.TimeField('Время выступления', null=True, blank=True)
+    performance_price = models.DecimalField(
+        'Цена выступления', max_digits=20, decimal_places=2, null=True, blank=True)
 
     class Meta:
         db_table = 'categories'
@@ -23,7 +27,8 @@ class Product(models.Model):
     short_description = models.TextField('Краткое описание')
     description = models.TextField('Описание', blank=True)
     price = models.DecimalField('Цена', max_digits=20, decimal_places=2)
-    image = models.CharField('Изображение', max_length=255, blank=True)
+    image = models.CharField('Изображение', max_length=255, blank=True,
+                             default='img/ticket.svg')
     available = models.BooleanField('В наличии', default=True)
     discount_percent = models.PositiveSmallIntegerField('Скидка, %', default=0, validators=[MaxValueValidator(100)])
     meta_keywords = models.CharField(max_length=255, blank=True)
@@ -42,6 +47,12 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        # У каждого билета всегда есть хотя бы стандартное изображение.
+        if not self.image:
+            self.image = 'img/ticket.svg'
+        super().save(*args, **kwargs)
 
 
 class ProductProperty(models.Model):
