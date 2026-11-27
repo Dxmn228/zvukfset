@@ -6,7 +6,7 @@
   <title>Артисты — Звук Фест</title>
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/global.css">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=7">
 </head>
 <body>
 <header class="header">
@@ -30,41 +30,56 @@
   </div>
 </header>
 <main>
-  <section class="section">
-    <div class="container">
-      <h1>Артисты</h1>
+  <section class="page-hero">
+    <div class="container page-hero__inner">
+      <p class="page-hero__eyebrow">Главная сцена · 16 июля 2027</p>
+      <h1 class="page-hero__title">Артисты</h1>
+      <p class="page-hero__lead">Четыре выступления — от открытия концертной программы до финального вечернего сета.</p>
+      <a class="button button_theme_green" href="program.html#lineup">Смотреть расписание</a>
     </div>
   </section>
 
   <section class="section">
     <div class="container">
+      <div class="section__head">
+        <h2 class="section__title">Лайнап фестиваля</h2>
+        <p class="section__text">Все артисты выступают последовательно на главной сцене. Время указано в программе и категориях билетов.</p>
+      </div>
       <ul class="artists">
         <li>
           <article class="artist artist_theme_green">
             <img class="artist__photo" src="img/shaman.jpg" alt="Фото артиста: Shaman" width="300" height="300" loading="lazy">
+            <p class="artist__time"><time datetime="2027-07-16T18:00">18:00</time> · Главная сцена</p>
             <h3 class="artist__name">Шаман</h3>
-            <p class="artist__text">Поп-рок. Выступает 16 июля на Главной сцене.</p>
+            <p class="artist__text">Открывает концертную программу фестиваля.</p>
+            <a class="artist__link" href="tickets.html">Выбрать билет</a>
           </article>
         </li>
         <li>
           <article class="artist artist_theme_green">
             <img class="artist__photo" src="img/vanya.jpg" alt="Фото артиста: Ваня Дмитриенко" width="300" height="300" loading="lazy">
+            <p class="artist__time"><time datetime="2027-07-16T19:30">19:30</time> · Главная сцена</p>
             <h3 class="artist__name">Ваня Дмитриенко</h3>
-            <p class="artist__text">Поп. Выступает 16 июля на Главной сцене.</p>
+            <p class="artist__text">Продолжает вечернюю программу на главной сцене.</p>
+            <a class="artist__link" href="tickets.html">Выбрать билет</a>
           </article>
         </li>
         <li>
           <article class="artist artist_theme_green">
             <img class="artist__photo" src="img/stas.jpg" alt="Фото артиста: Стас Михайлов" width="300" height="300" loading="lazy">
+            <p class="artist__time"><time datetime="2027-07-16T21:00">21:00</time> · Главная сцена</p>
             <h3 class="artist__name">Стас Михайлов</h3>
-            <p class="artist__text">Поп. Выступает 16 июля на Главной сцене.</p>
+            <p class="artist__text">Выступает в вечернем блоке фестиваля.</p>
+            <a class="artist__link" href="tickets.html">Выбрать билет</a>
           </article>
         </li>
         <li>
           <article class="artist artist_theme_green">
             <img class="artist__photo" src="img/anna.jpg" alt="Фото артиста: Анна Асти" width="300" height="300" loading="lazy">
+            <p class="artist__time"><time datetime="2027-07-16T22:30">22:30</time> · Главная сцена</p>
             <h3 class="artist__name">Анна Асти</h3>
-            <p class="artist__text">Поп. Выступает 16 июля на Главной сцене.</p>
+            <p class="artist__text">Завершает концертную программу фестиваля.</p>
+            <a class="artist__link" href="tickets.html">Выбрать билет</a>
           </article>
         </li>
       </ul>

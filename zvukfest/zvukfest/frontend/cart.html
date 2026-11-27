@@ -6,7 +6,7 @@
   <title>Корзина — Звук Фест</title>
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/global.css">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=7">
 </head>
 <body>
 <header class="header">
@@ -29,8 +29,11 @@
     <a class="header__button button button_theme_dark" href="tickets.html">Купить билет</a>
   </div>
 </header>
-<main><section class="section"><div class="container">
-<div class="section__head"><h1>Корзина</h1><p class="section__text">Ваши билеты на Звук Фест. До 20 билетов каждого типа.</p></div>
+<main>
+<section class="page-hero page-hero_compact"><div class="container page-hero__inner">
+<p class="page-hero__eyebrow">Ваш выбор</p><h1 class="page-hero__title">Корзина</h1><p class="page-hero__lead">Проверьте состав заказа, количество билетов и итоговую стоимость.</p>
+</div></section>
+<section class="section cart-page"><div class="container">
 <p id="cart-status" class="form__status" role="status" aria-live="polite">Загружаем корзину…</p>
 <div id="cart-empty" class="cta" hidden><h2>Корзина пока пуста</h2><p>Выберите билеты и соберите свой фестиваль.</p><a class="button button_theme_green" href="tickets.html">Выбрать билеты</a></div>
 <div id="cart-login" class="cta" hidden><h2>Войдите в аккаунт</h2><p>Корзина сохраняется в вашем личном кабинете.</p><a class="button button_theme_green" href="tickets.html#login">Войти или зарегистрироваться</a></div>
